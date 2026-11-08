@@ -2177,22 +2177,39 @@ async function loadProductCategories() {
     const select = document.getElementById("productCategory");
     if (!select) return;
     try {
-        const response = await fetch("/api/customer/categories");
-        const categories = await response.json();
+        const response = await RamjicartAPI.fetch("/api/customer/categories");
         if (!response.ok) throw new Error("Categories could not be loaded.");
+        const data = await response.json();
+        const categories = Array.isArray(data)
+            ? data
+            : Array.isArray(data.categories)
+                ? data.categories
+                : Array.isArray(data.results)
+                    ? data.results
+                    : [];
+        const activeCategories = categories
+            .filter(category => category.is_active)
+            .sort((a, b) => a.sort_order - b.sort_order);
+        if (!activeCategories.length) throw new Error("No active categories found.");
+
         select.replaceChildren(new Option("Select category", ""));
-        categories.forEach(function(category) {
+        activeCategories.forEach(function(category) {
             select.add(new Option(category.name, category.name));
         });
         select.addEventListener("change", function() {
-            const selected = categories.find(category => category.name === select.value);
-            document.getElementById("productQuantityUnit").value = selected && ["groceries", "fruits", "vegetables"].includes(selected.slug) ? "kg" : "piece";
+            const selected = activeCategories.find(category => category.name === select.value);
+            const quantityUnit = document.getElementById("productQuantityUnit");
+            if (quantityUnit) {
+                quantityUnit.value = selected && ["groceries", "fruits", "vegetables"].includes(selected.slug) ? "kg" : "piece";
+            }
         });
     } catch (error) {
-        select.replaceChildren(new Option("Categories unavailable", ""));
+        select.replaceChildren(new Option("Could not load categories", ""));
         console.error("Category options error:", error);
     }
 }
+
+loadProductCategories();
 
 
 /* =========================================
@@ -3018,8 +3035,6 @@ document.addEventListener(
         loadDashboardData();
 
         loadMenuProducts();
-
-        loadProductCategories();
 
         loadRestaurantOrders();
         loadRestaurantNotificationPreferences();

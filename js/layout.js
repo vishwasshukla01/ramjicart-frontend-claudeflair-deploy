@@ -22,6 +22,15 @@
                                 <div class="customer-profile-field"><span>Email</span><strong id="customerProfileEmail"></strong></div>
                                 <div class="customer-profile-field"><span>Phone</span><strong id="customerProfilePhone"></strong></div>
                             </div>
+                            <div id="themeSwitcherBar" role="group" aria-label="Choose website color theme">
+                                <span>🎨 Select Color:</span>
+                                <button type="button" data-theme-choice="1">1: Cosmic Glass</button>
+                                <button type="button" data-theme-choice="2">2: Midnight Slate</button>
+                                <button type="button" data-theme-choice="3">3: Charcoal</button>
+                                <button type="button" data-theme-choice="4">4: Milky Pearl</button>
+                                <button type="button" data-theme-choice="5">5: Sunset Amber</button>
+                                <button type="button" data-theme-choice="0">Original White</button>
+                            </div>
                             <button id="signOutButton" type="button">Sign out</button>
                         </section>
                     </div>
@@ -36,15 +45,6 @@
                     <a href="refund.html">Cancellation &amp; Refund Policy</a> ·
                     <a href="contact.html">Contact &amp; Support</a>
                 </p>
-                <div id="themeSwitcherBar" hidden style="position:fixed;bottom:calc(92px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:90;background:rgba(12,8,28,0.94);border:1px solid rgba(255,138,92,0.45);border-radius:30px;padding:6px 12px;display:flex;align-items:center;gap:6px;box-shadow:0 8px 30px rgba(0,0,0,0.6);backdrop-filter:blur(10px);max-width:calc(100vw - 20px);overflow-x:auto;-webkit-overflow-scrolling:touch;">
-                    <span style="color:#ff8a5c;font-size:12px;font-weight:bold;white-space:nowrap;margin-right:2px;">&#127912; Select Color:</span>
-                    <button type="button" data-theme-choice="1" style="border:none;background:#231742;color:#fff;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #7c3aed;">1: Cosmic Glass</button>
-                    <button type="button" data-theme-choice="2" style="border:none;background:#0f172a;color:#fff;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #3b82f6;">2: Midnight Slate</button>
-                    <button type="button" data-theme-choice="3" style="border:none;background:#18181b;color:#fff;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #71717a;">3: Charcoal</button>
-                    <button type="button" data-theme-choice="4" style="border:none;background:#f3f0ff;color:#1e1b4b;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #a78bfa;">4: Milky Pearl</button>
-                    <button type="button" data-theme-choice="5" style="border:none;background:#241224;color:#fed7aa;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid #f97316;">5: Sunset Amber</button>
-                    <button type="button" data-theme-choice="0" style="border:none;background:#fff;color:#111;padding:6px 10px;border-radius:15px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Original White</button>
-                </div>
             </footer>`,
         legalHeader: `
             <header>
@@ -76,7 +76,16 @@
     let nextButton;
     let activeImages = [];
     let activeIndex = 0;
-    let touchStartX = null;
+    let zoomScale = 1;
+    let panX = 0;
+    let panY = 0;
+    let zoomResetButton;
+    const activePointers = new Map();
+    let pinchStartDistance = 0;
+    let pinchStartScale = 1;
+    let pinchImageX = 0;
+    let pinchImageY = 0;
+    let swipeStart = null;
 
     function imageUrls(item) {
         const urls = [];
@@ -95,6 +104,7 @@
     }
 
     function renderViewerImage() {
+        resetViewerZoom();
         viewerImage.src = activeImages[activeIndex];
         imageCounter.textContent = activeImages.length > 1
             ? (activeIndex + 1) + " / " + activeImages.length
@@ -112,6 +122,49 @@
     function closeViewer() {
         if (viewer.open && typeof viewer.close === "function") viewer.close();
         else viewer.removeAttribute("open");
+    }
+
+    function clampZoom(value) {
+        return Math.max(1, Math.min(4, value));
+    }
+
+    function applyViewerZoom() {
+        viewerImage.style.transform =
+            "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")";
+        viewerImage.classList.toggle("is-zoomed", zoomScale > 1);
+        zoomResetButton.disabled = zoomScale === 1;
+    }
+
+    function resetViewerZoom() {
+        zoomScale = 1;
+        panX = 0;
+        panY = 0;
+        if (viewerImage && zoomResetButton) applyViewerZoom();
+    }
+
+    function zoomBy(amount) {
+        zoomScale = clampZoom(zoomScale + amount);
+        if (zoomScale === 1) {
+            panX = 0;
+            panY = 0;
+        }
+        applyViewerZoom();
+    }
+
+    function pointerDistance(first, second) {
+        return Math.hypot(second.x - first.x, second.y - first.y);
+    }
+
+    function pointerCenter(first, second) {
+        return { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+    }
+
+    function clampPan() {
+        const bounds = viewerImage.parentElement.getBoundingClientRect();
+        const maxX = bounds.width * (zoomScale - 1) / 2;
+        const maxY = bounds.height * (zoomScale - 1) / 2;
+        panX = Math.max(-maxX, Math.min(maxX, panX));
+        panY = Math.max(-maxY, Math.min(maxY, panY));
     }
 
     function createViewer() {
@@ -156,21 +209,94 @@
         imageCounter.setAttribute("aria-live", "polite");
 
         stage.append(viewerImage, previousButton, nextButton);
+        const zoomControls = document.createElement("div");
+        zoomControls.className = "ramjicart-image-viewer__zoom";
+        const zoomOutButton = document.createElement("button");
+        zoomOutButton.type = "button";
+        zoomOutButton.setAttribute("aria-label", "Zoom out");
+        zoomOutButton.textContent = "−";
+        zoomOutButton.addEventListener("click", function () { zoomBy(-0.5); });
+        const zoomInButton = document.createElement("button");
+        zoomInButton.type = "button";
+        zoomInButton.setAttribute("aria-label", "Zoom in");
+        zoomInButton.textContent = "+";
+        zoomInButton.addEventListener("click", function () { zoomBy(0.5); });
+        zoomResetButton = document.createElement("button");
+        zoomResetButton.type = "button";
+        zoomResetButton.setAttribute("aria-label", "Reset zoom");
+        zoomResetButton.textContent = "Reset";
+        zoomResetButton.disabled = true;
+        zoomResetButton.addEventListener("click", resetViewerZoom);
+        zoomControls.append(zoomOutButton, zoomInButton, zoomResetButton);
+        stage.appendChild(zoomControls);
         viewer.append(closeButton, stage, imageCounter);
         viewer.addEventListener("click", function (event) {
             if (event.target === viewer) closeViewer();
         });
-        viewer.addEventListener("touchstart", function (event) {
-            touchStartX = event.changedTouches.length ? event.changedTouches[0].clientX : null;
-        }, { passive: true });
-        viewer.addEventListener("touchend", function (event) {
-            if (touchStartX === null || !event.changedTouches.length) return;
-            const distance = event.changedTouches[0].clientX - touchStartX;
-            touchStartX = null;
-            if (Math.abs(distance) > 50) moveViewerImage(distance < 0 ? 1 : -1);
-        }, { passive: true });
+        stage.addEventListener("pointerdown", function (event) {
+            if (event.target !== viewerImage && event.target !== stage) return;
+            stage.setPointerCapture(event.pointerId);
+            activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+            if (activePointers.size === 1) {
+                swipeStart = { x: event.clientX, y: event.clientY };
+            } else if (activePointers.size === 2) {
+                const points = Array.from(activePointers.values());
+                const center = pointerCenter(points[0], points[1]);
+                const bounds = stage.getBoundingClientRect();
+                pinchStartDistance = pointerDistance(points[0], points[1]);
+                pinchStartScale = zoomScale;
+                pinchImageX = (center.x - bounds.left - bounds.width / 2 - panX) / zoomScale;
+                pinchImageY = (center.y - bounds.top - bounds.height / 2 - panY) / zoomScale;
+                swipeStart = null;
+            }
+        });
+        stage.addEventListener("pointermove", function (event) {
+            if (!activePointers.has(event.pointerId)) return;
+            activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+            const points = Array.from(activePointers.values());
+            if (points.length >= 2 && pinchStartDistance > 0) {
+                const center = pointerCenter(points[0], points[1]);
+                const bounds = stage.getBoundingClientRect();
+                zoomScale = clampZoom(
+                    pinchStartScale * pointerDistance(points[0], points[1]) / pinchStartDistance
+                );
+                panX = center.x - bounds.left - bounds.width / 2 - pinchImageX * zoomScale;
+                panY = center.y - bounds.top - bounds.height / 2 - pinchImageY * zoomScale;
+                clampPan();
+                applyViewerZoom();
+            } else if (points.length === 1 && zoomScale > 1) {
+                const previous = swipeStart;
+                if (previous) {
+                    panX += event.clientX - previous.x;
+                    panY += event.clientY - previous.y;
+                    swipeStart = { x: event.clientX, y: event.clientY };
+                    clampPan();
+                    applyViewerZoom();
+                }
+            }
+        });
+        function finishPointer(event) {
+            const wasSinglePointer = activePointers.size === 1;
+            const start = swipeStart;
+            activePointers.delete(event.pointerId);
+            if (wasSinglePointer && start && zoomScale === 1) {
+                const distanceX = event.clientX - start.x;
+                const distanceY = event.clientY - start.y;
+                if (Math.abs(distanceX) > 50 && Math.abs(distanceX) > Math.abs(distanceY)) {
+                    moveViewerImage(distanceX < 0 ? 1 : -1);
+                }
+            }
+            if (activePointers.size < 2) pinchStartDistance = 0;
+            swipeStart = activePointers.size === 1
+                ? Array.from(activePointers.values())[0]
+                : null;
+        }
+        stage.addEventListener("pointerup", finishPointer);
+        stage.addEventListener("pointercancel", finishPointer);
         viewer.addEventListener("close", function () {
             activeImages = [];
+            activePointers.clear();
+            resetViewerZoom();
         });
         document.body.appendChild(viewer);
     }
@@ -215,6 +341,9 @@
         if (!viewer || !viewer.open) return;
         if (event.key === "ArrowLeft") moveViewerImage(-1);
         if (event.key === "ArrowRight") moveViewerImage(1);
+        if (event.key === "+" || event.key === "=") zoomBy(0.5);
+        if (event.key === "-") zoomBy(-0.5);
+        if (event.key === "0") resetViewerZoom();
     });
 
     const themeBar = document.getElementById("themeSwitcherBar");

@@ -70,6 +70,7 @@
     display: grid;
     min-height: 0;
     place-items: center;
+    touch-action: none;
 }
 
 .ramjicart-image-viewer__image {
@@ -79,7 +80,8 @@
     object-fit: contain;
     user-select: none;
     -webkit-user-drag: none;
-    touch-action: pan-y;
+    touch-action: none;
+    transform-origin: center;
 }
 
 .ramjicart-image-viewer__close,
@@ -116,6 +118,31 @@
 
 .ramjicart-image-viewer__arrow.is-next {
     right: max(16px, env(safe-area-inset-right));
+}
+
+.ramjicart-image-viewer__zoom {
+    position: absolute;
+    z-index: 2;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.ramjicart-image-viewer__zoom button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 18px;
+    pointer-events: auto;
+}
+
+.ramjicart-image-viewer__zoom button:disabled {
+    cursor: default;
+    opacity: .55;
 }
 
 .ramjicart-image-viewer__counter {

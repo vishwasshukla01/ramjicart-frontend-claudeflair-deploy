@@ -71,14 +71,14 @@
         }
 
         #homepageLocationButton {
-            min-height: 40px;
-            margin-right: 12px;
-            padding: 8px 12px;
+            min-height: 34px;
+            margin-right: 8px;
+            padding: 5px 9px;
             border: 1px solid #ffd1c2;
             border-radius: 20px;
             background: #fff7f3;
             color: #a93219;
-            font: inherit;
+            font: 14px Arial, sans-serif;
             font-weight: 700;
             cursor: pointer;
         }
@@ -124,6 +124,44 @@
 
         .customer-profile-field strong {
             overflow-wrap: anywhere;
+        }
+
+        #themeSwitcherBar {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        #themeSwitcherBar > span {
+            grid-column: 1 / -1;
+            color: #586174;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        #themeSwitcherBar button {
+            min-height: 40px;
+            padding: 8px 10px;
+            border: 1px solid #dfe3e8;
+            border-radius: 9px;
+            background: #f5f6f8;
+            color: #303846;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #themeSwitcherBar button[data-theme-choice="1"] { background: #231742; color: #fff; border-color: #7c3aed; }
+        #themeSwitcherBar button[data-theme-choice="2"] { background: #0f172a; color: #fff; border-color: #3b82f6; }
+        #themeSwitcherBar button[data-theme-choice="3"] { background: #18181b; color: #fff; border-color: #71717a; }
+        #themeSwitcherBar button[data-theme-choice="4"] { background: #f3f0ff; color: #1e1b4b; border-color: #a78bfa; }
+        #themeSwitcherBar button[data-theme-choice="5"] { background: #241224; color: #fed7aa; border-color: #f97316; }
+
+        #themeSwitcherBar button:focus-visible {
+            outline: 3px solid rgba(240, 68, 43, .35);
+            outline-offset: 2px;
         }
 
         #signOutButton {
@@ -1725,6 +1763,48 @@
         const shopsNearYouList = document.getElementById("shopsNearYouList");
         const shopsNearYouMessage = document.getElementById("shopsNearYouMessage");
         let nearbyShops = [];
+        let homepageShopCategories = [];
+
+        function normalizeShopCategory(value) {
+            return String(value || "").trim().toLowerCase();
+        }
+
+        function populateShopCategoryFilter(restaurantCategories) {
+            const options = new Map();
+            homepageShopCategories.forEach(function (category) {
+                if (!category || !category.name) return;
+                const name = String(category.name).trim();
+                const value = normalizeShopCategory(category.slug || name);
+                if (!name || !value) return;
+                options.set(value, {
+                    name: name,
+                    aliases: [normalizeShopCategory(name), normalizeShopCategory(category.slug)]
+                });
+            });
+            (restaurantCategories || []).forEach(function (category) {
+                const name = typeof category === "string"
+                    ? category.trim()
+                    : category && String(category.name || "").trim();
+                if (!name) return;
+                const value = normalizeShopCategory(name);
+                const alreadyListed = Array.from(options.values()).some(function (option) {
+                    return option.aliases.includes(value);
+                });
+                if (!alreadyListed && !options.has(value)) {
+                    options.set(value, { name: name, aliases: [value] });
+                }
+            });
+
+            const selectedCategory = shopsNearYouCategory.value;
+            shopsNearYouCategory.replaceChildren(new Option("All categories", ""));
+            options.forEach(function (category, value) {
+                const option = new Option(category.name, value);
+                option.dataset.aliases = category.aliases.filter(Boolean).join("|");
+                shopsNearYouCategory.add(option);
+            });
+            shopsNearYouCategory.disabled = options.size === 0;
+            shopsNearYouCategory.value = options.has(selectedCategory) ? selectedCategory : "";
+        }
 
         function setHomepageLocationFields(location) {
             document.getElementById("shopsNearbyLandmark").value = location.nearbyLandmark || "";
@@ -1746,9 +1826,15 @@
         function renderNearbyShops() {
             const category = shopsNearYouCategory.value;
             const filtered = nearbyShops.filter(function (shop) {
-                return !category || (Array.isArray(shop.categories) && shop.categories.some(function (item) {
-                    return String(item).toLowerCase() === category;
-                }));
+                if (!category) return true;
+                const selectedOption = shopsNearYouCategory.selectedOptions[0];
+                const aliases = selectedOption && selectedOption.dataset.aliases
+                    ? selectedOption.dataset.aliases.split("|")
+                    : [category];
+                return Array.isArray(shop.categories) && shop.categories.some(function (item) {
+                    const value = typeof item === "string" ? item : item && item.name;
+                    return aliases.includes(normalizeShopCategory(value));
+                });
             });
             shopsNearYouList.replaceChildren();
             if (!filtered.length) {
@@ -1814,7 +1900,6 @@
 
         async function loadNearbyShops(location) {
             shopsNearYouList.replaceChildren();
-            shopsNearYouCategory.disabled = true;
             shopsNearYouMessage.textContent = "Finding shops...";
             try {
                 const response = await fetch(
@@ -1828,26 +1913,21 @@
                 shopsNearYouLocation.textContent = homepageLocationLabel(location)
                     || "Nearby location";
 
-                const currentCategory = shopsNearYouCategory.value;
                 const categories = Array.from(new Set(nearbyShops.flatMap(function (shop) {
                     return Array.isArray(shop.categories) ? shop.categories : [];
+                }).map(function (category) {
+                    return typeof category === "string" ? category : category && category.name;
                 }).filter(function (category) {
                     return typeof category === "string" && category.trim();
                 }))).sort(function (a, b) {
                     return a.localeCompare(b);
                 });
-                shopsNearYouCategory.replaceChildren(new Option("All categories", ""));
-                categories.forEach(function (category) {
-                    shopsNearYouCategory.add(new Option(category, category.toLowerCase()));
-                });
-                shopsNearYouCategory.disabled = categories.length === 0;
-                shopsNearYouCategory.value = categories.some(function (category) {
-                    return category.toLowerCase() === currentCategory;
-                }) ? currentCategory : "";
+                populateShopCategoryFilter(categories);
                 renderNearbyShops();
                 return true;
             } catch (error) {
                 nearbyShops = [];
+                populateShopCategoryFilter();
                 shopsNearYouMessage.textContent =
                     error.message || "Nearby shops could not be loaded.";
                 return false;
@@ -2088,7 +2168,7 @@
                         : orderedItems
                             ? "Top ordered and recommended picks"
                             : "Recommended dishes to try";
-                foods.slice(0, 4).forEach(function(food) {
+                foods.slice(0, 12).forEach(function(food) {
                     const card = document.createElement("article");
                     card.className = "craving-food-card";
                     const image = document.createElement("img");
@@ -2155,6 +2235,12 @@
                     await response.json();
 
                 categoryList.innerHTML = "";
+                homepageShopCategories = Array.isArray(categories)
+                    ? categories.filter(function (category) {
+                        return category && typeof category.name === "string" && category.name.trim();
+                    })
+                    : [];
+                populateShopCategoryFilter();
 
                 if (!categories.length) {
 

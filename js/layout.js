@@ -62,6 +62,155 @@
         }
     });
 
+    const galleries = new WeakMap();
+    let viewer;
+    let viewerImage;
+    let imageCounter;
+    let previousButton;
+    let nextButton;
+    let activeImages = [];
+    let activeIndex = 0;
+    let touchStartX = null;
+
+    function imageUrls(item) {
+        const urls = [];
+        function add(value) {
+            if (typeof value === "string" && value.trim() && !urls.includes(value.trim())) {
+                urls.push(value.trim());
+            }
+        }
+        add(item && item.image);
+        if (item && Array.isArray(item.images)) {
+            item.images.forEach(function (image) {
+                add(typeof image === "string" ? image : image && image.url);
+            });
+        }
+        return urls;
+    }
+
+    function renderViewerImage() {
+        viewerImage.src = activeImages[activeIndex];
+        imageCounter.textContent = activeImages.length > 1
+            ? (activeIndex + 1) + " / " + activeImages.length
+            : "";
+        previousButton.hidden = activeImages.length < 2;
+        nextButton.hidden = activeImages.length < 2;
+    }
+
+    function moveViewerImage(direction) {
+        if (activeImages.length < 2) return;
+        activeIndex = (activeIndex + direction + activeImages.length) % activeImages.length;
+        renderViewerImage();
+    }
+
+    function closeViewer() {
+        if (viewer.open && typeof viewer.close === "function") viewer.close();
+        else viewer.removeAttribute("open");
+    }
+
+    function createViewer() {
+        viewer = document.createElement("dialog");
+        viewer.className = "ramjicart-image-viewer";
+        viewer.setAttribute("aria-label", "Product image viewer");
+
+        const stage = document.createElement("div");
+        stage.className = "ramjicart-image-viewer__stage";
+        viewerImage = document.createElement("img");
+        viewerImage.className = "ramjicart-image-viewer__image";
+        viewerImage.alt = "";
+        viewerImage.draggable = false;
+        viewerImage.onerror = function () {
+            viewerImage.onerror = null;
+            viewerImage.src = "images/food-placeholder.svg";
+        };
+
+        const closeButton = document.createElement("button");
+        closeButton.className = "ramjicart-image-viewer__close";
+        closeButton.type = "button";
+        closeButton.setAttribute("aria-label", "Close image viewer");
+        closeButton.textContent = "×";
+        closeButton.addEventListener("click", closeViewer);
+
+        previousButton = document.createElement("button");
+        previousButton.className = "ramjicart-image-viewer__arrow is-previous";
+        previousButton.type = "button";
+        previousButton.setAttribute("aria-label", "Previous image");
+        previousButton.textContent = "‹";
+        previousButton.addEventListener("click", function () { moveViewerImage(-1); });
+
+        nextButton = document.createElement("button");
+        nextButton.className = "ramjicart-image-viewer__arrow is-next";
+        nextButton.type = "button";
+        nextButton.setAttribute("aria-label", "Next image");
+        nextButton.textContent = "›";
+        nextButton.addEventListener("click", function () { moveViewerImage(1); });
+
+        imageCounter = document.createElement("span");
+        imageCounter.className = "ramjicart-image-viewer__counter";
+        imageCounter.setAttribute("aria-live", "polite");
+
+        stage.append(viewerImage, previousButton, nextButton);
+        viewer.append(closeButton, stage, imageCounter);
+        viewer.addEventListener("click", function (event) {
+            if (event.target === viewer) closeViewer();
+        });
+        viewer.addEventListener("touchstart", function (event) {
+            touchStartX = event.changedTouches.length ? event.changedTouches[0].clientX : null;
+        }, { passive: true });
+        viewer.addEventListener("touchend", function (event) {
+            if (touchStartX === null || !event.changedTouches.length) return;
+            const distance = event.changedTouches[0].clientX - touchStartX;
+            touchStartX = null;
+            if (Math.abs(distance) > 50) moveViewerImage(distance < 0 ? 1 : -1);
+        }, { passive: true });
+        viewer.addEventListener("close", function () {
+            activeImages = [];
+        });
+        document.body.appendChild(viewer);
+    }
+
+    window.RamjicartImageViewer = {
+        source: function (item, fallback) {
+            return imageUrls(item)[0] || fallback;
+        },
+        bind: function (image, item) {
+            const urls = imageUrls(item);
+            if (!urls.length) return;
+            galleries.set(image, urls);
+            image.classList.add("ramjicart-image-viewer__trigger");
+            image.tabIndex = 0;
+            image.setAttribute("role", "button");
+            image.setAttribute("aria-label", "View " + (item.name || "product") + " image");
+        }
+    };
+
+    document.addEventListener("click", function (event) {
+        if (!(event.target instanceof Element)) return;
+        const image = event.target.closest(".ramjicart-image-viewer__trigger");
+        const urls = image && galleries.get(image);
+        if (!urls || !urls.length) return;
+        if (!viewer) createViewer();
+        activeImages = urls;
+        activeIndex = 0;
+        viewerImage.alt = image.alt || "";
+        renderViewerImage();
+        if (typeof viewer.showModal === "function") viewer.showModal();
+        else viewer.setAttribute("open", "");
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.target instanceof Element
+                && event.target.closest(".ramjicart-image-viewer__trigger")
+                && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            event.target.click();
+            return;
+        }
+        if (!viewer || !viewer.open) return;
+        if (event.key === "ArrowLeft") moveViewerImage(-1);
+        if (event.key === "ArrowRight") moveViewerImage(1);
+    });
+
     const themeBar = document.getElementById("themeSwitcherBar");
     if (themeBar) {
         window.setAppTheme = function (theme) {

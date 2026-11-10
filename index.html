@@ -1660,9 +1660,10 @@
                     const card = document.createElement("article");
                     card.className = "craving-food-card";
                     const image = document.createElement("img");
-                    image.src = food.image || "images/food-placeholder.svg";
+                    image.src = window.RamjicartImageViewer.source(food, "images/food-placeholder.svg");
                     image.alt = food.name || "Food item";
                     image.loading = "lazy";
+                    window.RamjicartImageViewer.bind(image, food);
                     image.onerror = function() {
                         this.onerror = null;
                         this.src = "images/food-placeholder.svg";
@@ -1860,9 +1861,10 @@
                 card.className = "food-card";
 
                 const image = document.createElement("img");
-                image.src = food.image || "images/food-placeholder.svg";
+                image.src = window.RamjicartImageViewer.source(food, "images/food-placeholder.svg");
                 image.alt = food.name || "Food item";
                 image.loading = "lazy";
+                window.RamjicartImageViewer.bind(image, food);
                 image.onerror = function() {
                     this.onerror = null;
                     this.src = "images/food-placeholder.svg";

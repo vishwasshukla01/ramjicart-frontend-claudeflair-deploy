@@ -36,6 +36,104 @@
     width: auto;
 }
 
+.ramjicart-image-viewer__trigger {
+    cursor: zoom-in;
+}
+
+.ramjicart-image-viewer {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: rgba(0, 0, 0, .94);
+    color: #fff;
+}
+
+.ramjicart-image-viewer[open] {
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+.ramjicart-image-viewer::backdrop {
+    background: rgba(0, 0, 0, .94);
+}
+
+.ramjicart-image-viewer__stage {
+    position: relative;
+    display: grid;
+    min-height: 0;
+    place-items: center;
+}
+
+.ramjicart-image-viewer__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: pan-y;
+}
+
+.ramjicart-image-viewer__close,
+.ramjicart-image-viewer__arrow {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    font: inherit;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.ramjicart-image-viewer__close {
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    font-size: 34px;
+}
+
+.ramjicart-image-viewer__arrow {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ramjicart-image-viewer__arrow.is-previous {
+    left: max(16px, env(safe-area-inset-left));
+}
+
+.ramjicart-image-viewer__arrow.is-next {
+    right: max(16px, env(safe-area-inset-right));
+}
+
+.ramjicart-image-viewer__counter {
+    min-height: 44px;
+    padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+    color: #fff;
+    text-align: center;
+}
+
+.ramjicart-image-viewer button:focus-visible {
+    outline: 3px solid #ff9c3d;
+    outline-offset: 3px;
+}
+
+.ramjicart-image-viewer button[hidden] {
+    display: none;
+}
+
 /* AD CSS */
 .ad-wrapper {
     box-sizing: border-box;

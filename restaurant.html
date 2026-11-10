@@ -753,9 +753,10 @@
                     card.className = "food-card";
 
                     const img = document.createElement("img");
-                    img.src = item.image || "images/food-placeholder.svg";
+                    img.src = window.RamjicartImageViewer.source(item, "images/food-placeholder.svg");
                     img.alt = item.name || "Food";
                     img.loading = "lazy";
+                    window.RamjicartImageViewer.bind(img, item);
                     img.onerror = function() {
                         this.onerror = null;
                         this.src = "images/food-placeholder.svg";

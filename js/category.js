@@ -32,11 +32,15 @@
         return node;
     }
 
-    function foodImage(url, alt) {
+    function foodImage(url, alt, food) {
         const image = element("img");
         image.loading = "lazy";
         image.alt = alt || "";
         image.src = url || "images/food-placeholder.svg";
+        if (food) {
+            image.src = window.RamjicartImageViewer.source(food, "images/food-placeholder.svg");
+            window.RamjicartImageViewer.bind(image, food);
+        }
         image.onerror = function () {
             image.onerror = null;
             image.src = "images/food-placeholder.svg";
@@ -203,7 +207,7 @@
             const items = element("div", "items");
             shop.items.forEach(function (food) {
                 const row = element("article", "product");
-                row.appendChild(foodImage(food.image, food.name));
+                row.appendChild(foodImage(food.image, food.name, food));
                 const info = element("div", "product-info");
                 info.append(
                     element("h3", "", food.name),

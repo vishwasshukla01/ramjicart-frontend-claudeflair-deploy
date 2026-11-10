@@ -1184,7 +1184,8 @@
 
 
                 image.src =
-                    item.image || "images/food-placeholder.svg";
+                    window.RamjicartImageViewer.source(item, "images/food-placeholder.svg");
+                window.RamjicartImageViewer.bind(image, item);
                 image.onerror = function() {
                     this.onerror = null;
                     this.src = "images/food-placeholder.svg";

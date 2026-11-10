@@ -154,6 +154,7 @@
                     name: food.name,
                     description: food.description || "",
                     image: food.image || "",
+                    images: Array.isArray(food.images) ? food.images.slice() : [],
                     price: Number((basePrice + addonPrice).toFixed(2)),
                     quantity: quantity,
                     quantityUnit: food.quantityUnit || "piece",

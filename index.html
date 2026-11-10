@@ -432,19 +432,29 @@
             grid-column: 1 / -1;
         }
 
-        .shops-nearby-controls {
+        .shops-nearby-heading {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin: -4px 0 16px;
+            margin-bottom: 8px;
         }
 
-        .shops-nearby-controls select {
+        .shops-nearby-heading h2 {
+            min-width: 0;
+            margin: 0;
+        }
+
+        .shops-nearby-heading select {
+            flex: 0 0 auto;
             width: min(150px, 42vw);
             min-height: 36px;
             padding: 6px 26px 6px 10px;
             font-size: 13px;
+        }
+
+        .shops-nearby-controls {
+            margin: 0 0 16px;
         }
 
         .homepage-location-dialog input {
@@ -784,9 +794,51 @@
 
             .craving-food-card img { height: 100px; }
             .craving-food-card { padding: 10px; }
-            #shopsNearYouList { grid-template-columns: minmax(0, 1fr); }
+            #shopsNearYouList {
+                display: flex;
+                grid-template-columns: none;
+                gap: 12px;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                padding: 2px 2px 12px;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: thin;
+            }
+            #shopsNearYouList > .nearby-shop-card {
+                flex: 0 0 calc(50% - 6px);
+                grid-template-columns: 48px minmax(0, 1fr);
+                align-content: start;
+                gap: 8px;
+                padding: 10px;
+                scroll-snap-align: start;
+            }
+            #shopsNearYouList > .nearby-shop-card:nth-child(even) {
+                scroll-snap-align: none;
+            }
+            .nearby-shop-card > img,
+            .nearby-shop-logo-fallback {
+                width: 40px;
+                height: 40px;
+                border-radius: 9px;
+                font-size: 18px;
+            }
+            .nearby-shop-card h3 { font-size: 13px; }
+            .nearby-shop-card .nearby-shop-meta { font-size: 10px; }
+            .nearby-shop-card button { min-height: 36px; margin-top: 6px; padding: 7px 6px; font-size: 12px; }
+            #shopsNearYouLocation {
+                min-width: 0;
+                margin: 0;
+                color: #e2e8f0;
+                font-size: 12px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .shops-nearby-heading { gap: 8px; }
+            .shops-nearby-heading h2 { font-size: 20px; }
+            .shops-nearby-heading select { width: 132px; min-height: 34px; }
             .homepage-location-fields { grid-template-columns: 1fr; }
-            .shops-nearby-controls { align-items: stretch; flex-direction: column; }
+            .shops-nearby-controls { display: block; }
 
             main > section h2 {
                 font-size: 25px;
@@ -1620,15 +1672,17 @@
         </section>
 
         <section id="shopsNearYou" aria-labelledby="shopsNearYouHeading">
-            <h2 id="shopsNearYouHeading">Shops Near You</h2>
-            <div class="shops-nearby-controls">
-                <p id="shopsNearYouLocation" aria-live="polite">Choose a location to find nearby shops.</p>
+            <div class="shops-nearby-heading">
+                <h2 id="shopsNearYouHeading">Shops Near You</h2>
                 <label>
                     <span class="sr-only">Filter shops by category</span>
                     <select id="shopsNearYouCategory" aria-label="Filter shops by category" disabled>
                         <option value="">All categories</option>
                     </select>
                 </label>
+            </div>
+            <div class="shops-nearby-controls">
+                <p id="shopsNearYouLocation" aria-live="polite">Choose a location to find nearby shops.</p>
             </div>
             <div id="shopsNearYouList" aria-live="polite"></div>
             <p id="shopsNearYouMessage" class="message" role="status" aria-live="polite">

@@ -417,6 +417,27 @@ form > .message {
     gap: 18px;
 }
 
+.restaurant-load-more {
+    grid-column: 1 / -1;
+    justify-self: center;
+    min-height: 44px;
+    padding: 10px 24px;
+    border: 0;
+    border-radius: 10px;
+    background: #ff6500;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.restaurant-load-more:hover {
+    background: #e95700;
+}
+
+.restaurant-load-more[hidden] {
+    display: none;
+}
+
 .restaurant-match-label {
     color: #168a45;
     font-size: 12px;
@@ -690,8 +711,19 @@ form > .message {
         flex-direction: column;
     }
 
+    .restaurant-list {
+        display: flex;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: thin;
+        padding: 2px 2px 12px;
+    }
+
     .restaurant-card {
+        flex: 0 0 min(86vw, 360px);
         padding: 8px;
+        scroll-snap-align: start;
     }
 
     .restaurant-image {
@@ -828,6 +860,9 @@ form > .message {
 
 
         <div id="restaurant-list" class="restaurant-list" aria-live="polite"></div>
+        <button id="loadMoreRestaurants" class="restaurant-load-more" type="button" hidden>
+            Load more
+        </button>
         <p id="restaurant-message" class="message" role="status" aria-live="polite">
             Share your current location for distance-ranked results, or enter your city and PIN code.
         </p>
@@ -847,8 +882,10 @@ const categoryProducts = document.getElementById("category-products");
 const categoryProductList = document.getElementById("category-product-list");
 const categoryProductsTitle = document.getElementById("category-products-title");
 const categoryProductsMessage = document.getElementById("category-products-message");
+const loadMoreRestaurantsButton = document.getElementById("loadMoreRestaurants");
 let availableRestaurants = [];
 let searchText = "";
+let visibleRestaurantCount = 15;
 
 const categoryPhotos = [
     { match: "pizza", url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=240&q=80" },
@@ -987,6 +1024,7 @@ function renderRestaurants() {
     });
 
     restaurantList.innerHTML = "";
+    loadMoreRestaurantsButton.hidden = filtered.length <= visibleRestaurantCount;
     if (!filtered.length) {
         restaurantMessage.textContent = availableRestaurants.length
             ? "No restaurants match that search."
@@ -995,7 +1033,7 @@ function renderRestaurants() {
     }
 
     restaurantMessage.textContent = "";
-    filtered.forEach(function(restaurant) {
+    filtered.slice(0, visibleRestaurantCount).forEach(function(restaurant) {
         const card = document.createElement("article");
         card.className = "restaurant-card";
 
@@ -1084,9 +1122,15 @@ function renderRestaurants() {
     });
 }
 
+loadMoreRestaurantsButton.addEventListener("click", function() {
+    visibleRestaurantCount += 15;
+    renderRestaurants();
+});
+
 async function loadNearbyRestaurants(location, scrollToResults) {
     restaurantMessage.textContent = "Finding restaurants...";
     restaurantList.innerHTML = "";
+    visibleRestaurantCount = 15;
     const params = new URLSearchParams(location);
     try {
         const response = await fetch("/api/customer/restaurants?" + params.toString());
@@ -1170,6 +1214,7 @@ document.getElementById("useCurrentLocationButton")
 
 function filterRestaurants(scrollToResults) {
     searchText = restaurantSearchInput.value.trim().toLowerCase();
+    visibleRestaurantCount = 15;
     renderRestaurants();
     if (scrollToResults) {
         document.getElementById("restaurants").scrollIntoView({ behavior: "smooth", block: "start" });

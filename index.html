@@ -7,6 +7,7 @@
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/galaxy-bg.js" defer></script>
+    <script src="js/ads.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ramjicart - Food Delivery</title>
@@ -1267,6 +1268,51 @@
             border-bottom: 1px solid rgba(255, 138, 92, 0.2) !important;
             border-top: 1px solid rgba(255, 138, 92, 0.2) !important;
         }
+
+        /* CART UI */
+        body {
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+        }
+
+        header {
+            z-index: 200;
+        }
+
+        main > section:not(:first-child) {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        #popular-food {
+            scroll-margin-top: 84px;
+        }
+
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: calc(90px + env(safe-area-inset-bottom));
+                font-size: 14px;
+            }
+        }
+
+        /* AD CSS */
+        .ad-wrapper .ad-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        body .ad-wrapper > .ad-slot {
+            display: block;
+            width: 100%;
+            min-height: 100px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.10) !important;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04) !important;
+            box-shadow: none !important;
+            box-sizing: border-box;
+        }
     </style>
     <script src="js/auth-client.js" defer></script>
     <script src="js/maps-client.js" defer></script>
@@ -1317,10 +1363,11 @@
 
         </section>
 
-        <aside class="ad-slot" id="homepage-ad-slot" aria-label="Advertisement">
-            <span>ADVERTISEMENT</span>
-            <p>Promote your business to nearby customers.</p>
-        </aside>
+        <!-- // AD SLOT -->
+        <div class="ad-wrapper" id="homepage-ad-slot" data-ad-slot="home-top" aria-label="Advertisement">
+            <span class="ad-label">ADVERTISEMENT</span>
+            <div class="ad-slot"></div>
+        </div>
 
         <!-- CATEGORIES -->
 
@@ -1344,7 +1391,7 @@
 
         <!-- POPULAR FOOD -->
 
-        <section>
+        <section id="popular-food">
 
             <h2>
                 Popular Near You
@@ -1363,6 +1410,11 @@
 
         </section>
 
+        <!-- // AD SLOT -->
+        <div class="ad-wrapper" data-ad-slot="home-middle" aria-label="Advertisement">
+            <span class="ad-label">ADVERTISEMENT</span>
+            <div class="ad-slot"></div>
+        </div>
 
         <!-- ORDER TRACKING -->
 

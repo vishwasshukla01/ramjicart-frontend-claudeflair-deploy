@@ -70,6 +70,19 @@
             display: block;
         }
 
+        #homepageLocationButton {
+            min-height: 40px;
+            margin-right: 12px;
+            padding: 8px 12px;
+            border: 1px solid #ffd1c2;
+            border-radius: 20px;
+            background: #fff7f3;
+            color: #a93219;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
         #customerProfile {
             position: absolute;
             top: calc(100% + 14px);
@@ -335,6 +348,155 @@
             outline-offset: 3px;
         }
 
+        #shopsNearYouList {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .nearby-shop-card {
+            display: grid;
+            grid-template-columns: 76px minmax(0, 1fr);
+            align-items: start;
+            gap: 12px;
+        }
+
+        .nearby-shop-card > img,
+        .nearby-shop-logo-fallback {
+            display: grid;
+            width: 76px;
+            height: 76px;
+            place-items: center;
+            border-radius: 12px;
+            background: #fff0e8;
+            color: #e95732;
+            font-size: 30px;
+            font-weight: 800;
+            object-fit: cover;
+        }
+
+        .nearby-shop-logo-fallback[hidden] {
+            display: none;
+        }
+
+        .nearby-shop-card h3,
+        .nearby-shop-card p {
+            overflow-wrap: anywhere;
+            white-space: normal;
+        }
+
+        .nearby-shop-card .nearby-shop-meta {
+            color: #687386;
+            font-size: 13px;
+        }
+
+        .nearby-shop-card button {
+            grid-column: 1 / -1;
+        }
+
+        .shops-nearby-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: -4px 0 16px;
+        }
+
+        .shops-nearby-controls select {
+            width: min(150px, 42vw);
+            min-height: 36px;
+            padding: 6px 26px 6px 10px;
+            font-size: 13px;
+        }
+
+        .homepage-location-dialog input {
+            min-height: 44px;
+            padding: 9px 12px;
+            border: 1px solid #dfe3e8;
+            border-radius: 9px;
+            background: #fff;
+            color: #20252b;
+            font: inherit;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .homepage-location-dialog {
+            width: min(520px, calc(100vw - 28px));
+            max-height: min(90vh, 760px);
+            margin: auto;
+            padding: 22px;
+            border: 0;
+            border-radius: 16px;
+            background: #fff;
+            color: #20252b;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
+        }
+
+        .homepage-location-dialog::backdrop {
+            background: rgba(15, 23, 42, .62);
+        }
+
+        .homepage-location-dialog h2 {
+            margin: 0 42px 8px 0;
+            color: #20252b;
+            text-shadow: none;
+        }
+
+        .homepage-location-dialog p {
+            margin-bottom: 14px;
+            color: #586174;
+        }
+
+        .homepage-location-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .homepage-location-dialog input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .homepage-location-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .homepage-location-actions button {
+            min-height: 44px;
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 9px;
+            background: #f0442b;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .homepage-location-actions button[type="button"] {
+            background: #eef1f5;
+            color: #303846;
+        }
+
+        #shopsLocationMessage {
+            min-height: 1.4em;
+            margin-top: 10px;
+        }
+
         #orderHistoryList {
             display: grid;
             gap: 10px;
@@ -538,6 +700,8 @@
                 transform: translateX(50%);
             }
 
+            #shopsNearYouList { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
             .customer-profile-grid {
                 grid-template-columns: 1fr;
             }
@@ -582,6 +746,9 @@
 
             .craving-food-card img { height: 100px; }
             .craving-food-card { padding: 10px; }
+            #shopsNearYouList { grid-template-columns: minmax(0, 1fr); }
+            .homepage-location-fields { grid-template-columns: 1fr; }
+            .shops-nearby-controls { align-items: stretch; flex-direction: column; }
 
             main > section h2 {
                 font-size: 25px;
@@ -598,6 +765,8 @@
             .nav-links { justify-content: flex-start; gap: 4px 8px; }
             .nav-links > a,
             .account-menu > a { display: inline-flex; min-height: 44px; align-items: center; padding: 8px 10px; }
+            .account-menu { display: flex; align-items: center; gap: 4px; }
+            #homepageLocationButton { min-height: 44px; margin-right: 4px; padding: 7px 9px; font-size: 13px; }
 
             main > section:not(:first-child) { margin: 36px auto; padding: 0 16px; }
             main > section:first-child { min-height: 0; padding: 44px 16px; }
@@ -1412,6 +1581,42 @@
 
         </section>
 
+        <section id="shopsNearYou" aria-labelledby="shopsNearYouHeading">
+            <h2 id="shopsNearYouHeading">Shops Near You</h2>
+            <div class="shops-nearby-controls">
+                <p id="shopsNearYouLocation" aria-live="polite">Choose a location to find nearby shops.</p>
+                <label>
+                    <span class="sr-only">Filter shops by category</span>
+                    <select id="shopsNearYouCategory" aria-label="Filter shops by category" disabled>
+                        <option value="">All categories</option>
+                    </select>
+                </label>
+            </div>
+            <div id="shopsNearYouList" aria-live="polite"></div>
+            <p id="shopsNearYouMessage" class="message" role="status" aria-live="polite">
+                Choose a location to see nearby shops.
+            </p>
+        </section>
+
+        <dialog id="homepageLocationDialog" class="homepage-location-dialog" aria-labelledby="homepageLocationHeading">
+            <form id="homepageLocationForm">
+                <h2 id="homepageLocationHeading">Choose your location</h2>
+                <p>Enter your area details or use your phone's current location.</p>
+                <div class="homepage-location-fields">
+                    <input id="shopsNearbyLandmark" name="nearbyLandmark" type="text" maxlength="160" placeholder="Nearby landmark (optional)" aria-label="Nearby landmark">
+                    <input id="shopsNearbyMarket" name="market" type="text" maxlength="160" placeholder="Market (optional)" aria-label="Market">
+                    <input id="shopsNearbyPincode" name="pincode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit PIN code" aria-label="6-digit PIN code">
+                    <input id="shopsNearbyCity" name="city" type="text" maxlength="100" placeholder="City" aria-label="City">
+                </div>
+                <p id="shopsLocationMessage" class="message" role="status" aria-live="polite"></p>
+                <div class="homepage-location-actions">
+                    <button id="shopsUseCurrentLocation" type="button">Use my current location</button>
+                    <button type="submit">Set location</button>
+                    <button id="shopsCancelLocation" type="button">Cancel</button>
+                </div>
+            </form>
+        </dialog>
+
         <!-- // AD SLOT -->
         <div class="ad-wrapper" data-ad-slot="home-middle" aria-label="Advertisement">
             <span class="ad-label">ADVERTISEMENT</span>
@@ -1511,6 +1716,233 @@
 
         const accountLink = document.getElementById("accountLink");
         const customerProfile = document.getElementById("customerProfile");
+        const homepageLocationButton = document.getElementById("homepageLocationButton");
+        const homepageLocationDialog = document.getElementById("homepageLocationDialog");
+        const homepageLocationForm = document.getElementById("homepageLocationForm");
+        const shopsLocationMessage = document.getElementById("shopsLocationMessage");
+        const shopsNearYouLocation = document.getElementById("shopsNearYouLocation");
+        const shopsNearYouCategory = document.getElementById("shopsNearYouCategory");
+        const shopsNearYouList = document.getElementById("shopsNearYouList");
+        const shopsNearYouMessage = document.getElementById("shopsNearYouMessage");
+        let nearbyShops = [];
+
+        function setHomepageLocationFields(location) {
+            document.getElementById("shopsNearbyLandmark").value = location.nearbyLandmark || "";
+            document.getElementById("shopsNearbyMarket").value = location.market || "";
+            document.getElementById("shopsNearbyPincode").value = location.pincode || "";
+            document.getElementById("shopsNearbyCity").value = location.city || "";
+        }
+
+        function homepageLocationLabel(location) {
+            if (location.latitude && location.longitude) return "Near your current location";
+            return [
+                location.nearbyLandmark,
+                location.market,
+                location.pincode,
+                location.city
+            ].filter(Boolean).join(" · ");
+        }
+
+        function renderNearbyShops() {
+            const category = shopsNearYouCategory.value;
+            const filtered = nearbyShops.filter(function (shop) {
+                return !category || (Array.isArray(shop.categories) && shop.categories.some(function (item) {
+                    return String(item).toLowerCase() === category;
+                }));
+            });
+            shopsNearYouList.replaceChildren();
+            if (!filtered.length) {
+                shopsNearYouMessage.textContent = nearbyShops.length
+                    ? "No shops match this category."
+                    : "No shops currently match this location.";
+                return;
+            }
+
+            shopsNearYouMessage.textContent = "";
+            filtered.forEach(function (shop) {
+                const card = document.createElement("article");
+                card.className = "craving-food-card nearby-shop-card";
+                const fallback = document.createElement("span");
+                fallback.className = "nearby-shop-logo-fallback";
+                fallback.textContent = (shop.name || "S").charAt(0).toUpperCase();
+                card.append(fallback);
+                if (shop.logo) {
+                    const image = document.createElement("img");
+                    image.src = shop.logo;
+                    image.alt = (shop.name || "Shop") + " logo";
+                    image.loading = "lazy";
+                    fallback.hidden = true;
+                    image.onerror = function () {
+                        image.remove();
+                        fallback.hidden = false;
+                    };
+                    card.append(image);
+                }
+
+                const details = document.createElement("div");
+                const name = document.createElement("h3");
+                name.textContent = shop.name || "Shop";
+                const categories = document.createElement("p");
+                categories.className = "nearby-shop-meta";
+                categories.textContent = Array.isArray(shop.categories) && shop.categories.length
+                    ? shop.categories.join(" · ")
+                    : "Menu available";
+                const address = document.createElement("p");
+                address.className = "nearby-shop-meta";
+                address.textContent = [
+                    shop.address,
+                    shop.nearbyLandmark,
+                    shop.market,
+                    shop.city,
+                    shop.pincode
+                ].filter(Boolean).join(", ");
+                const proximity = document.createElement("p");
+                proximity.className = "nearby-shop-meta";
+                proximity.textContent = shop.proximityMatch || "";
+                details.append(name, categories, address, proximity);
+
+                const viewButton = document.createElement("button");
+                viewButton.type = "button";
+                viewButton.textContent = "View shop";
+                viewButton.addEventListener("click", function () {
+                    window.location.href = "restaurant.html?id=" + encodeURIComponent(shop.id);
+                });
+                card.append(details, viewButton);
+                shopsNearYouList.append(card);
+            });
+        }
+
+        async function loadNearbyShops(location) {
+            shopsNearYouList.replaceChildren();
+            shopsNearYouCategory.disabled = true;
+            shopsNearYouMessage.textContent = "Finding shops...";
+            try {
+                const response = await fetch(
+                    "/api/customer/restaurants?" + new URLSearchParams(location).toString()
+                );
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || data.detail || "Nearby shops could not be loaded.");
+                }
+                nearbyShops = Array.isArray(data.restaurants) ? data.restaurants : [];
+                shopsNearYouLocation.textContent = homepageLocationLabel(location)
+                    || "Nearby location";
+
+                const currentCategory = shopsNearYouCategory.value;
+                const categories = Array.from(new Set(nearbyShops.flatMap(function (shop) {
+                    return Array.isArray(shop.categories) ? shop.categories : [];
+                }).filter(function (category) {
+                    return typeof category === "string" && category.trim();
+                }))).sort(function (a, b) {
+                    return a.localeCompare(b);
+                });
+                shopsNearYouCategory.replaceChildren(new Option("All categories", ""));
+                categories.forEach(function (category) {
+                    shopsNearYouCategory.add(new Option(category, category.toLowerCase()));
+                });
+                shopsNearYouCategory.disabled = categories.length === 0;
+                shopsNearYouCategory.value = categories.some(function (category) {
+                    return category.toLowerCase() === currentCategory;
+                }) ? currentCategory : "";
+                renderNearbyShops();
+                return true;
+            } catch (error) {
+                nearbyShops = [];
+                shopsNearYouMessage.textContent =
+                    error.message || "Nearby shops could not be loaded.";
+                return false;
+            }
+        }
+
+        async function submitHomepageLocation(location) {
+            if (Boolean(location.latitude) !== Boolean(location.longitude)) {
+                shopsLocationMessage.textContent = "Both location coordinates are required.";
+                return false;
+            }
+            if (!location.latitude
+                    && (!location.city || !/^\d{6}$/.test(location.pincode || ""))) {
+                shopsLocationMessage.textContent =
+                    "Enter your city and valid 6-digit PIN code, or use your current location.";
+                return false;
+            }
+            sessionStorage.setItem("restaurantSearchLocation", JSON.stringify(location));
+            const loaded = await loadNearbyShops(location);
+            if (loaded) {
+                homepageLocationButton.textContent = "📍 " + (location.city || location.pincode || "Location");
+                homepageLocationDialog.close();
+            } else {
+                shopsLocationMessage.textContent = shopsNearYouMessage.textContent;
+            }
+            return loaded;
+        }
+
+        homepageLocationButton.addEventListener("click", function () {
+            try {
+                setHomepageLocationFields(JSON.parse(
+                    sessionStorage.getItem("restaurantSearchLocation") || "{}"
+                ));
+            } catch (error) {
+                console.error("Saved shop location could not be read:", error);
+                setHomepageLocationFields({});
+            }
+            shopsLocationMessage.textContent = "";
+            homepageLocationDialog.showModal();
+        });
+
+        document.getElementById("shopsCancelLocation").addEventListener("click", function () {
+            homepageLocationDialog.close();
+        });
+
+        homepageLocationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            submitHomepageLocation({
+                nearbyLandmark: document.getElementById("shopsNearbyLandmark").value.trim(),
+                market: document.getElementById("shopsNearbyMarket").value.trim(),
+                pincode: document.getElementById("shopsNearbyPincode").value.trim(),
+                city: document.getElementById("shopsNearbyCity").value.trim(),
+                latitude: "",
+                longitude: ""
+            });
+        });
+
+        document.getElementById("shopsUseCurrentLocation").addEventListener("click", function () {
+            shopsLocationMessage.textContent = "Requesting location permission...";
+            RamjicartMaps.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 30000
+            }).then(function (position) {
+                submitHomepageLocation({
+                    nearbyLandmark: document.getElementById("shopsNearbyLandmark").value.trim(),
+                    market: document.getElementById("shopsNearbyMarket").value.trim(),
+                    pincode: "",
+                    city: "",
+                    latitude: position.coords.latitude.toFixed(6),
+                    longitude: position.coords.longitude.toFixed(6)
+                });
+            }).catch(function (error) {
+                shopsLocationMessage.textContent =
+                    error.message || "Could not read device location.";
+            });
+        });
+
+        shopsNearYouCategory.addEventListener("change", renderNearbyShops);
+
+        try {
+            const savedShopLocation = JSON.parse(
+                sessionStorage.getItem("restaurantSearchLocation") || "null"
+            );
+            if (savedShopLocation
+                    && ((savedShopLocation.latitude && savedShopLocation.longitude)
+                        || (savedShopLocation.city && savedShopLocation.pincode))) {
+                setHomepageLocationFields(savedShopLocation);
+                homepageLocationButton.textContent = "📍 "
+                    + (savedShopLocation.city || savedShopLocation.pincode || "Location");
+                loadNearbyShops(savedShopLocation);
+            }
+        } catch (error) {
+            console.error("Saved shop location could not be read:", error);
+        }
 
         async function signOut() {
             const response = await RamjicartAuth.logout();
@@ -1692,7 +2124,7 @@
                     }
                     const button = document.createElement("button");
                     button.type = "button";
-                    button.textContent = "Order Now";
+                    button.textContent = "Add to Cart";
                     button.addEventListener("click", function() {
                         addToCart(food, selectedQuantity, button, menuOptions.selection());
                     });

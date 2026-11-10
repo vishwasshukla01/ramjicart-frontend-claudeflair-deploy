@@ -13,6 +13,7 @@
                         <a href="contact.html">contact us</a>
                     </div>
                     <div class="account-menu">
+                        <button id="homepageLocationButton" type="button" aria-haspopup="dialog" aria-controls="homepageLocationDialog">📍 Location</button>
                         <a href="login.html" id="accountLink">Sign in</a>
                         <section id="customerProfile" aria-label="Customer profile" hidden>
                             <h2>Your profile</h2>
@@ -61,6 +62,11 @@
             placeholder.remove();
         }
     });
+
+    const homepageLocationButton = document.getElementById("homepageLocationButton");
+    if (homepageLocationButton && !document.getElementById("shopsNearYou")) {
+        homepageLocationButton.hidden = true;
+    }
 
     const galleries = new WeakMap();
     let viewer;

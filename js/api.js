@@ -153,7 +153,7 @@
                     foodId: food.id,
                     name: food.name,
                     description: food.description || "",
-                    image: food.image || food.photo || "",
+                    image: food.image || "",
                     price: Number((basePrice + addonPrice).toFixed(2)),
                     quantity: quantity,
                     quantityUnit: food.quantityUnit || "piece",

@@ -203,7 +203,7 @@
             const items = element("div", "items");
             shop.items.forEach(function (food) {
                 const row = element("article", "product");
-                row.appendChild(foodImage(food.photo, food.name));
+                row.appendChild(foodImage(food.image, food.name));
                 const info = element("div", "product-info");
                 info.append(
                     element("h3", "", food.name),

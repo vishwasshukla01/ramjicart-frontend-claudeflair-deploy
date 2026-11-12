@@ -1044,7 +1044,7 @@ function renderRestaurants() {
         imageWrap.appendChild(fallback);
         if (restaurant.logo) {
             const image = document.createElement("img");
-            image.src = restaurant.logo;
+            image.src = window.RamjicartImageViewer.resolve(restaurant.logo);
             image.alt = restaurant.name + " logo";
             image.loading = "lazy";
             image.onerror = function() { image.remove(); };

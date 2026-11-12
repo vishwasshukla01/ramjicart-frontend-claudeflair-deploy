@@ -732,7 +732,7 @@
                     status.classList.toggle("closed", !restaurant.acceptingOrders);
                     if (restaurant.logo) {
                         const logo = document.getElementById("restaurantLogo");
-                        logo.src = restaurant.logo;
+                        logo.src = window.RamjicartImageViewer.resolve(restaurant.logo);
                         logo.alt = restaurantName;
                     }
                     searchInput.placeholder = "Search in " + restaurantName + "...";

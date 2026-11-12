@@ -93,7 +93,7 @@
         const urls = [];
         function add(value) {
             if (typeof value === "string" && value.trim() && !urls.includes(value.trim())) {
-                urls.push(value.trim());
+                urls.push(resolveImageUrl(value.trim()));
             }
         }
         add(item && item.image);
@@ -103,6 +103,20 @@
             });
         }
         return urls;
+    }
+
+    // Uploaded media belongs to the API host. API responses may contain a
+    // root-relative /media/... path, which would otherwise point at the Pages
+    // frontend domain and 404 in production.
+    function resolveImageUrl(value) {
+        if (typeof value !== "string" || !value.trim()) return "";
+        const url = value.trim();
+        if (/^(data:|blob:)/i.test(url)) return url;
+        try {
+            return new URL(url, (typeof API_URL !== "undefined" ? API_URL : window.location.origin) + "/").href;
+        } catch (error) {
+            return url;
+        }
     }
 
     function renderViewerImage() {
@@ -304,6 +318,7 @@
     }
 
     window.RamjicartImageViewer = {
+        resolve: resolveImageUrl,
         source: function (item, fallback) {
             return imageUrls(item)[0] || fallback;
         },

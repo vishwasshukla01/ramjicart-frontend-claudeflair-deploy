@@ -1935,7 +1935,7 @@
                 card.append(fallback);
                 if (shop.logo) {
                     const image = document.createElement("img");
-                    image.src = shop.logo;
+                    image.src = window.RamjicartImageViewer.resolve(shop.logo);
                     image.alt = (shop.name || "Shop") + " logo";
                     image.loading = "lazy";
                     fallback.hidden = true;

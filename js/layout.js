@@ -43,7 +43,9 @@
                     <a href="terms.html">Terms and Conditions</a> ·
                     <a href="privacy.html">Privacy Policy</a> ·
                     <a href="refund.html">Cancellation &amp; Refund Policy</a> ·
-                    <a href="contact.html">Contact &amp; Support</a>
+                    <a href="contact.html">Contact &amp; Support</a> ·
+                    <a href="about.html">About Us</a> ·
+                    <a href="articles.html">Food Articles</a>
                 </p>
             </footer>`,
         legalHeader: `

@@ -1,0 +1,192 @@
+/* Restaurant workspace visual system. This file only changes presentation. */
+:root {
+    --panel-ink: #17233b;
+    --panel-muted: #68758a;
+    --panel-line: #e5eaf1;
+    --panel-surface: #ffffff;
+    --panel-canvas: #f4f6fa;
+    --panel-accent: #e85d24;
+    --panel-accent-dark: #c84918;
+    --panel-shadow: 0 12px 34px rgba(25, 42, 70, .07);
+}
+
+html { scroll-behavior: smooth; }
+body {
+    background: var(--panel-canvas) !important;
+    color: var(--panel-ink) !important;
+    font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+body > header,
+body > .header {
+    color: var(--panel-ink);
+    background: rgba(255,255,255,.96) !important;
+    border-bottom: 1px solid var(--panel-line) !important;
+    box-shadow: 0 4px 18px rgba(24,39,65,.045);
+    backdrop-filter: blur(14px);
+}
+
+body > header h2,
+.main-upperdiv h1,
+.orders-page-header h1,
+.page-title h1,
+.welcome h1 { color: var(--panel-ink); letter-spacing: -.035em; }
+
+.header-container { max-width: 1440px; }
+.header-right, .header-actions { gap: 10px; }
+.restaurant-account, .restaurant-info, .partner-name { color: var(--panel-ink); }
+.restaurant-logo, .restaurant-info img, .profile-logo {
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px var(--panel-line), 0 5px 14px rgba(23,35,59,.1);
+}
+
+.second-list {
+    background: #fff !important;
+    border-bottom: 1px solid var(--panel-line);
+    box-shadow: 0 4px 12px rgba(23,35,59,.035);
+}
+.second-list ul { max-width: 1440px; margin-inline: auto; }
+.second-list a { color: #536177; border-radius: 10px; transition: background .18s ease, color .18s ease; }
+.second-list a:hover, .second-list .first-list a { color: var(--panel-accent-dark); background: #fff3ed; }
+
+.hero-banner {
+    overflow: hidden;
+    border: 1px solid rgba(232,93,36,.12);
+    border-radius: 24px;
+    background: linear-gradient(120deg,#fff 0%,#fff7f2 65%,#ffede2 100%);
+    box-shadow: var(--panel-shadow);
+}
+.dashboard-stats-container, .order-stats, .stats { gap: 16px; }
+.stat-card, .report-metric {
+    border: 1px solid var(--panel-line);
+    border-radius: 18px;
+    background: var(--panel-surface);
+    box-shadow: 0 7px 22px rgba(25,42,70,.045);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--panel-shadow); }
+.card-icon { border-radius: 14px; }
+
+.add-product-section, .menu-section, .restaurant-orders-section,
+.restaurant-profile-summary, .orders-section, .orders-box, .current-delivery,
+.profile-card, .details-card, .settings-card {
+    border: 1px solid var(--panel-line) !important;
+    border-radius: 20px !important;
+    background: var(--panel-surface) !important;
+    box-shadow: var(--panel-shadow);
+}
+.section-header, .menu-header, .restaurant-orders-header,
+.orders-section-header, .section-title-row { gap: 16px; }
+.section-header h2, .menu-title h2, .orders-section-header h2,
+.section-title-row h2, .settings-card h2, .details-card h2 { color: var(--panel-ink); letter-spacing: -.02em; }
+.menu-item, .order-card, .restaurant-order-card {
+    border: 1px solid var(--panel-line) !important;
+    border-radius: 16px !important;
+    background: #fff !important;
+    box-shadow: 0 5px 18px rgba(25,42,70,.045);
+}
+.menu-item:hover, .order-card:hover { box-shadow: 0 12px 28px rgba(25,42,70,.09); }
+.menu-item-image { border-radius: 12px; }
+.orders-section, .orders-box, .current-delivery, .add-product-section,
+.menu-section, .restaurant-orders-section, .restaurant-profile-summary,
+.profile-card, .details-card, .settings-card { padding: clamp(18px, 2.4vw, 30px); }
+
+button, .logout-button, .save-button, .accept-btn, .pickup-btn, .delivery-btn,
+.accept-button, .cancel-button, .view-button, .section-refresh, .form-button button {
+    border-radius: 11px;
+    font-weight: 650;
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+button:not(:disabled):hover, .logout-button:hover, .save-button:hover,
+.accept-btn:hover, .pickup-btn:hover, .delivery-btn:hover,
+.accept-button:hover, .cancel-button:hover, .view-button:hover {
+    transform: translateY(-1px);
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible { outline: 3px solid rgba(232,93,36,.24); outline-offset: 2px; }
+
+input:not([type="checkbox"]):not([type="radio"]), select, textarea,
+.order-search input, .status-filter select {
+    border: 1px solid #dce3ed !important;
+    border-radius: 11px !important;
+    background: #fff;
+    color: var(--panel-ink);
+    box-shadow: inset 0 1px 2px rgba(23,35,59,.025);
+}
+input:focus, select:focus, textarea:focus { border-color: #f19b76 !important; box-shadow: 0 0 0 4px rgba(232,93,36,.1) !important; }
+label, .form-group label { color: #43516a; font-weight: 650; }
+
+.back-to-dashboard {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 13px;
+    border: 1px solid var(--panel-line);
+    border-radius: 10px;
+    background: #fff;
+    color: #46556d;
+    text-decoration: none;
+    font-weight: 650;
+}
+.page-title { margin-block: 24px; }
+.page-title p, .orders-page-header p, .welcome p { color: var(--panel-muted); }
+.profile-container, .settings-container { gap: 20px; }
+.profile-card { align-self: start; }
+.setting-row { border-color: var(--panel-line) !important; }
+
+.order-status, .status { border-radius: 999px; font-weight: 700; }
+.order-details, .order-info { gap: 12px; }
+.detail-box, .info-box { border: 1px solid var(--panel-line); border-radius: 12px; background: #f9fafc; }
+.order-items { border-color: var(--panel-line); }
+.order-total { color: var(--panel-ink); }
+.empty-state, .no-orders { border-radius: 16px; color: var(--panel-muted); }
+
+@media (max-width: 760px) {
+    body { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+    body > header, body > .header { position: sticky; top: 0; z-index: 1000; }
+    .header-container { width: 100%; }
+    .second-list { overflow-x: auto; overscroll-behavior-inline: contain; }
+    .second-list ul { width: max-content; min-width: 100%; }
+    .second-list a { min-height: 44px; display: inline-flex; align-items: center; }
+    .hero-banner { border-radius: 18px; }
+    .orders-page, .delivery-page { width: 100%; }
+    .orders-page-header, .orders-section-header, .section-title-row { align-items: flex-start; flex-wrap: wrap; }
+    .order-controls { width: 100%; flex-wrap: wrap; }
+    .order-search, .status-filter { flex: 1 1 190px; min-width: 0; }
+    .order-search input, .status-filter select { width: 100%; }
+    .order-actions, .button-group { flex-wrap: wrap; }
+    .order-actions button, .button-group button { flex: 1 1 140px; }
+    .report-table-wrap { border: 1px solid var(--panel-line); border-radius: 12px; }
+    .profile-container, .settings-container { grid-template-columns: minmax(0,1fr); }
+    .profile-card { width: 100%; }
+}
+
+@media (max-width: 520px) {
+    .main-upperdiv h1 { font-size: 21px; }
+    .header-right { gap: 6px; }
+    .dashboard-stats-container, .order-stats, .stats { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .stat-card { min-width: 0; padding: 14px; }
+    .stat-card h2, .card-value { overflow-wrap: anywhere; }
+    .orders-page, .delivery-page { padding-inline: 14px; }
+    .orders-section, .orders-box, .current-delivery, .add-product-section,
+    .menu-section, .restaurant-orders-section, .restaurant-profile-summary,
+    .profile-card, .details-card, .settings-card { padding: 17px; border-radius: 16px !important; }
+    .order-details, .order-info { grid-template-columns: minmax(0,1fr); }
+    .order-card { padding: 15px; }
+    .order-header, .order-card-top { flex-wrap: wrap; }
+    .restaurant-info { gap: 8px; }
+    .page-title { margin-block: 18px; }
+    .page-title h1 { font-size: 27px; }
+    button, .logout-button, .save-button, .back-to-dashboard { min-height: 44px; }
+    input:not([type="checkbox"]):not([type="radio"]), select, textarea { min-height: 46px; font-size: 16px; }
+}
+
+@media (max-width: 370px) {
+    .dashboard-stats-container, .order-stats, .stats { grid-template-columns: minmax(0,1fr); }
+    .main-upperdiv h1 { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

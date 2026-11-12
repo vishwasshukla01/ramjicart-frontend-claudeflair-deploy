@@ -4,7 +4,7 @@
 <head>
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/site.css">
     <script src="config.js"></script>
@@ -1546,6 +1546,7 @@ body {
 }
 </style>
 
+<link rel="stylesheet" href="css/restaurant-panel.css">
     <script src="js/auth-client.js" defer></script>
     <script src="js/maps-client.js" defer></script>
     <script src="js/layout.js" defer></script>
@@ -1853,16 +1854,20 @@ body {
         </div>
 
 
-        <!-- Product Image -->
         <div class="form-group">
-            <label for="productImage">Product Image URL</label>
-
+            <label for="productImageFile">Product photo</label>
             <input
-                type="url"
-                id="productImage"
-                name="productImage"
-                placeholder="https://example.com/food.jpg"
+                type="file"
+                id="productImageFile"
+                name="productImageFile"
+                accept="image/*"
+                capture="environment"
             >
+            <button type="button" id="chooseProductGallery">Choose from gallery</button>
+            <input type="file" id="productGalleryFile" accept="image/*" hidden>
+            <img id="productPhotoPreview" alt="Selected product photo preview" hidden style="max-width:120px;max-height:120px;object-fit:cover">
+            <button type="button" id="removeProductPhoto" hidden>Remove / retake photo</button>
+            <small>Photo will be resized before upload. Maximum upload size: 3 MB.</small>
         </div>
 
         <div class="form-group">
@@ -2269,8 +2274,9 @@ function renderMenuProducts(products) {
             <img loading="lazy"
                 loading="lazy"
                 class="menu-item-image"
-                src="${escapeMenuHtml(product.image || "")}"
+                src="${escapeMenuHtml(product.image || "images/food-placeholder.svg")}" 
                 alt="${escapeMenuHtml(product.name || "Product")}"
+                onerror="this.onerror=null;this.src='images/food-placeholder.svg'"
             >
 
             <div class="menu-item-content">
@@ -2327,8 +2333,7 @@ async function editMenuProduct(product) {
     if (price === null) return;
     const description = prompt("Description", product.description || "");
     if (description === null) return;
-    const image = prompt("Photo URL (leave blank for no photo)", product.image || "");
-    if (image === null) return;
+    const imageFile = await chooseProductImageFile(product.image || "");
     const variantsText = prompt("Variants (Name:Price per line)", optionLines(product.variants));
     if (variantsText === null) return;
     const addonsText = prompt("Add-ons (Name:Price per line)", optionLines(product.addons));
@@ -2353,12 +2358,77 @@ async function editMenuProduct(product) {
     const variants = variantsText.trim() ? variantsText.trim().split(/\r?\n/).map(line => { const [optionName, ...amount] = line.split(":"); return {name: optionName.trim(), price: amount.join(":").trim()}; }) : [];
     const addons = addonsText.trim() ? addonsText.trim().split(/\r?\n/).map(line => { const [optionName, ...amount] = line.split(":"); return {name: optionName.trim(), price: amount.join(":").trim()}; }) : [];
     try {
-        const response = await fetch(`/api/restaurant/products/${product.id}`, {method:"PUT", headers:{"Content-Type":"application/json","X-CSRFToken":orderCsrfToken()}, body:JSON.stringify({name, price, description, image, categoryId:category.id, quantityUnit:product.quantityUnit, variants, addons, stockQuantity:stockQuantity.trim() ? stockQuantity : null})});
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("description", description);
+        formData.append("categoryId", category.id);
+        formData.append("quantityUnit", product.quantityUnit);
+        formData.append("variants", JSON.stringify(variants));
+        formData.append("addons", JSON.stringify(addons));
+        formData.append("stockQuantity", stockQuantity.trim() ? stockQuantity : "");
+        if (imageFile) formData.append("productImageFile", await compressProductImage(imageFile));
+        const response = await fetch(`/api/restaurant/products/${product.id}`, {method:"PUT", headers:{"X-CSRFToken":orderCsrfToken()}, body:formData});
         const result = await response.json();
         if (!response.ok) throw new Error(result.message || "Product update failed.");
         menuProducts = menuProducts.map(item => item.id === result.id ? result : item);
         renderMenuProducts(menuProducts);
     } catch (error) { alert(error.message); }
+}
+
+async function compressProductImage(file) {
+    try {
+        if (!window.createImageBitmap) return file;
+        const bitmap = await createImageBitmap(file, {imageOrientation: "from-image"});
+        const scale = Math.min(1, 1000 / bitmap.width, 1000 / bitmap.height);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+        const context = canvas.getContext("2d");
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close();
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.8));
+        return blob || file;
+    } catch (error) {
+        console.warn("Product image compression failed; sending original.", error);
+        return file;
+    }
+}
+
+function chooseProductImageFile(currentImage = "") {
+    return new Promise(resolve => {
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:fixed;inset:0;z-index:10000;background:#0008;display:grid;place-items:center;padding:16px";
+        const panel = document.createElement("div");
+        panel.style.cssText = "background:white;padding:20px;border-radius:12px;max-width:360px;width:100%";
+        panel.innerHTML = `<h3>Product photo</h3><img alt="Current or selected product photo" style="width:100%;max-height:180px;object-fit:contain"><input type="file" accept="image/*" capture="environment"><button type="button" data-gallery>Choose from gallery</button><input type="file" accept="image/*" hidden><div><button type="button" data-done>Use photo</button><button type="button" data-cancel>Cancel</button><button type="button" data-clear>Remove selection</button></div>`;
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+        const image = panel.querySelector("img");
+        const inputs = panel.querySelectorAll("input[type=file]");
+        let selected = null;
+        let previewUrl = "";
+        const setPreview = source => {
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            previewUrl = source instanceof File ? URL.createObjectURL(source) : source;
+            image.src = previewUrl || "images/food-placeholder.svg";
+            image.onerror = () => { image.onerror = null; image.src = "images/food-placeholder.svg"; };
+        };
+        setPreview(currentImage);
+        inputs.forEach(input => input.addEventListener("change", () => {
+            if (!input.files[0]) return;
+            selected = input.files[0];
+            setPreview(selected);
+        }));
+        panel.querySelector("[data-gallery]").onclick = () => inputs[1].click();
+        const finish = value => { if (previewUrl.startsWith("blob:")) URL.revokeObjectURL(previewUrl); overlay.remove(); resolve(value); };
+        panel.querySelector("[data-done]").onclick = () => finish(selected);
+        panel.querySelector("[data-cancel]").onclick = () => finish(null);
+        panel.querySelector("[data-clear]").onclick = () => { selected = null; inputs.forEach(input => input.value = ""); setPreview(currentImage); };
+        overlay.addEventListener("click", event => { if (event.target === overlay) finish(null); });
+    });
 }
 
 async function toggleMenuProduct(product) {
@@ -2456,6 +2526,33 @@ const productForm =
 
 
 if (productForm) {
+    const cameraInput = document.getElementById("productImageFile");
+    const galleryInput = document.getElementById("productGalleryFile");
+    const photoPreview = document.getElementById("productPhotoPreview");
+    let selectedProductPhoto = null;
+    const setSelectedProductPhoto = file => {
+        selectedProductPhoto = file;
+        if (photoPreview.dataset.previewUrl) URL.revokeObjectURL(photoPreview.dataset.previewUrl);
+        if (file) {
+            photoPreview.dataset.previewUrl = URL.createObjectURL(file);
+            photoPreview.src = photoPreview.dataset.previewUrl;
+            photoPreview.hidden = false;
+            document.getElementById("removeProductPhoto").hidden = false;
+        } else {
+            photoPreview.removeAttribute("src");
+            photoPreview.hidden = true;
+            document.getElementById("removeProductPhoto").hidden = true;
+        }
+    };
+    [cameraInput, galleryInput].forEach(input => input.addEventListener("change", () => {
+        if (input.files[0]) setSelectedProductPhoto(input.files[0]);
+    }));
+    document.getElementById("chooseProductGallery").addEventListener("click", () => galleryInput.click());
+    document.getElementById("removeProductPhoto").addEventListener("click", () => {
+        cameraInput.value = "";
+        galleryInput.value = "";
+        setSelectedProductPhoto(null);
+    });
 
     productForm.addEventListener(
         "submit",
@@ -2470,8 +2567,9 @@ if (productForm) {
 
             /* Form data */
 
-            const formData =
-                new FormData(productForm);
+            const formData = new FormData(productForm);
+            formData.delete("productImageFile");
+            if (selectedProductPhoto) formData.append("productImageFile", await compressProductImage(selectedProductPhoto), "product.jpg");
 
 
             try {
@@ -2538,6 +2636,7 @@ if (productForm) {
                 */
 
                 productForm.reset();
+                setSelectedProductPhoto(null);
 
 
                 alert(

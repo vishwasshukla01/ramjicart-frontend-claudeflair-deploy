@@ -3,7 +3,7 @@
 <head>
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/site.css">
     <script src="config.js"></script>
@@ -562,20 +562,20 @@
 
         .order-history-card summary {
             display: grid;
-            grid-template-columns: minmax(150px, 1.2fr) minmax(110px, 1fr) minmax(120px, 1fr) auto auto;
+            grid-template-columns: minmax(0, 1fr) auto auto;
             align-items: center;
-            gap: 14px;
-            padding: 14px 18px;
+            gap: 12px;
+            padding: 10px 14px;
             cursor: pointer;
             list-style: none;
         }
 
         .order-history-card summary::-webkit-details-marker { display: none; }
         .order-history-card summary:hover { background: #fff8f5; }
-        .order-history-title { margin: 0; font-size: 15px; font-weight: 700; }
+        .order-history-title { margin: 0; font-size: 14px; font-weight: 700; }
         .order-history-meta { margin: 0; color: #687386; font-size: 13px; }
         .order-history-total { color: #ff4d2d; font-weight: 700; white-space: nowrap; }
-        .order-history-status { margin: 0; color: #168a45; font-size: 13px; font-weight: 600; }
+        .order-history-status { margin: 0; color: #168a45; font-size: 12px; font-weight: 600; text-align: right; }
         .order-history-details {
             padding: 0 18px 15px;
             border-top: 1px solid #eef1f4;
@@ -585,15 +585,13 @@
 
         @media (max-width: 650px) {
             .order-history-card summary {
-                grid-template-columns: 1fr auto;
-                gap: 5px 12px;
-                padding: 12px;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 4px 10px;
+                padding: 9px 11px;
             }
-            .order-history-meta { grid-column: 1; }
-            .order-history-restaurant { grid-column: 1; grid-row: 2; }
-            .order-history-date { grid-column: 1; grid-row: 3; }
-            .order-history-total { grid-column: 2; grid-row: 1; }
-            .order-history-status { grid-column: 2; grid-row: 2; text-align: right; }
+            .order-history-title { font-size: 13px; }
+            .order-history-total { grid-column: 2; grid-row: 1; font-size: 13px; }
+            .order-history-status { grid-column: 1 / -1; grid-row: 2; text-align: left; font-size: 12px; }
         }
 
         /* FOOD CARDS */
@@ -694,10 +692,17 @@
 
         footer {
             background: #222;
-            color: #aaa;
+            color: #fff;
             text-align: center;
             padding: 25px;
             margin-top: 50px;
+        }
+
+        footer a,
+        footer a:visited,
+        footer a:hover,
+        footer a:active {
+            color: #fff;
         }
 
         footer p {
@@ -876,7 +881,7 @@
 
             #orderTracking { padding: 18px; }
             #trackingSteps p { min-height: 44px; display: flex; align-items: center; }
-            .order-history-card summary { min-height: 62px; }
+            .order-history-card summary { min-height: 0; }
             .order-history-meta,
             .order-history-status { font-size: 14px; }
 
@@ -1180,7 +1185,7 @@
             #orderTracking { padding: 17px; border-radius: 16px; }
             #trackingSteps p { min-height: 44px; display: flex; align-items: center; }
             .order-history-card { border-radius: 15px; }
-            .order-history-card summary { min-height: 60px; }
+            .order-history-card summary { min-height: 0; }
             footer { margin-top: 30px; padding-bottom: 22px; }
         }
 
@@ -2768,10 +2773,7 @@
                     const heading = document.createElement("div");
                     heading.className = "order-history-title";
                     heading.textContent = "Order #" + order.orderNumber;
-                    const dailyNumber = document.createElement("div");
-                    dailyNumber.className = "order-history-meta";
-                    dailyNumber.textContent = "Daily order no: #" + (order.dailyOrderNumber ?? "—");
-                    orderBlock.append(heading, dailyNumber);
+                    orderBlock.append(heading);
 
                     const restaurant = document.createElement("span");
                     restaurant.textContent = order.restaurantName;
@@ -2789,7 +2791,7 @@
                     const collapsedTotal = document.createElement("span");
                     collapsedTotal.className = "order-history-total";
                     collapsedTotal.textContent = "₹" + Number(order.total).toFixed(2);
-                    summary.append(orderBlock, restaurant, date, collapsedTotal, status);
+                    summary.append(orderBlock, collapsedTotal, status);
                     card.appendChild(summary);
                     const details = document.createElement("div");
                     details.className = "order-history-details";

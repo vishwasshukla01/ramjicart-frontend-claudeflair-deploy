@@ -3,7 +3,7 @@
 <head>
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/site.css">
     <script src="config.js"></script>
@@ -17,7 +17,8 @@
         /* पूरे पेज का बैकग्राउंड और फॉन्ट */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #fff;
+            background: linear-gradient(135deg, #0b0716 0%, #171127 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,7 +29,9 @@
 
         /* मेन कार्ड बॉक्स */
         .contact-card {
-            background: white;
+            color: #fff;
+            background: #171127;
+            border: 1px solid #35294b;
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -39,9 +42,10 @@
         /* हेडिंग स्टाइल */
         .contact-card h2 {
             margin-bottom: 25px;
-            color: #333;
+            color: #fff;
         }
-        .contact-details { color: #555; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+        .contact-details { color: #fff; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+        .contact-card a:not(.btn) { color: #ff9b76; }
         .contact-details p { margin: 10px 0; }
         .contact-card .site-logo {
             width: 82px;

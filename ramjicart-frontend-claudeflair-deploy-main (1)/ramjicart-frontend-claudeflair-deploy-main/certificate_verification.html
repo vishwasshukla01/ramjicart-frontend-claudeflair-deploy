@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/site.css">
+    <script src="config.js"></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification | Ramjicart</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            display: grid;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            place-items: center;
+            background: #eef2f7;
+            color: #10233f;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        main {
+            width: min(520px, 100%);
+            padding: 42px 34px;
+            border-top: 7px solid #d94c4c;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 12px 40px rgba(16, 35, 63, .12);
+            text-align: center;
+        }
+        .status {
+            display: grid;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 20px;
+            place-items: center;
+            border-radius: 50%;
+            background: #fff0f0;
+            color: #c43d3d;
+            font-size: 42px;
+            font-weight: 700;
+        }
+        h1 { margin: 0 0 10px; font-size: 28px; }
+        p { color: #526174; line-height: 1.6; }
+        .number {
+            margin-top: 24px;
+            padding: 14px;
+            border: 1px solid #d8e0e9;
+            border-radius: 6px;
+            color: #10233f;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+        .brand { margin-top: 18px; color: #f36b21; font-size: 12px; font-weight: 700; }
+        .company-logo { width: 72px; height: 72px; margin-bottom: 10px; object-fit: contain; }
+        @media (max-width: 480px) {
+            body { padding: 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+            main { padding: 28px 18px; }
+            p { font-size: 16px; }
+            .brand { font-size: 14px; }
+            .number { font-size: 16px; }
+        }
+    </style>
+    <script src="js/layout.js" defer></script>
+</head>
+<body>
+    <main>
+        <a href="index.html" aria-label="Ramjicart home"><img loading="lazy" class="company-logo" src="images/logo%20(2).png" alt="Ramjicart logo"></a>
+        <div class="status" id="verificationStatus" aria-hidden="true">…</div>
+        <h1 id="verificationTitle">Checking certificate</h1>
+        <p id="verificationMessage">Please wait while we verify this certificate.</p>
+        <div class="number" id="verificationNumber"></div>
+        <p id="verifiedRestaurant" hidden><strong></strong></p>
+        <div class="brand">RAMJICART</div>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+        (async function() {
+            const registrationNumber = new URLSearchParams(location.search)
+                .get("registrationNumber");
+            const status = document.getElementById("verificationStatus");
+            const title = document.getElementById("verificationTitle");
+            const message = document.getElementById("verificationMessage");
+            const number = document.getElementById("verificationNumber");
+            const name = document.querySelector("#verifiedRestaurant strong");
+            if (!registrationNumber) {
+                title.textContent = "Not Verified";
+                message.textContent = "A certificate registration number was not provided.";
+                status.textContent = "×";
+                return;
+            }
+            number.textContent = registrationNumber;
+            const response = await fetch(
+                "/api/certificate/verify/" + encodeURIComponent(registrationNumber)
+            );
+            const result = await response.json();
+            if (!response.ok || !result.verified) {
+                title.textContent = "Not Verified";
+                message.textContent = result.detail
+                    || "This certificate is not currently active. Contact Ramjicart if you believe this is an error.";
+                status.textContent = "×";
+                return;
+            }
+            document.querySelector("main").style.borderTopColor = "#20a56b";
+            status.style.background = "#e8f7ef";
+            status.style.color = "#168351";
+            status.textContent = "✓";
+            title.textContent = "Certificate Verified";
+            message.textContent = "This is a valid Ramjicart restaurant partnership certificate, issued by Ramjicart.";
+            name.textContent = result.restaurantName;
+            document.getElementById("verifiedRestaurant").hidden = false;
+        })().catch(function(error) {
+            document.getElementById("verificationTitle").textContent = "Could not verify";
+            document.getElementById("verificationMessage").textContent =
+                error.message || "Certificate verification could not be completed.";
+        });
+    
+        });
+    </script>
+</body>
+</html>

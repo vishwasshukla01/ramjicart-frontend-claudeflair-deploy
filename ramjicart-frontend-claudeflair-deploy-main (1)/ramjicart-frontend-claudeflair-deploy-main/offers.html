@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/campaign-ads.css">
+    <script src="config.js"></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/campaign-ads-fetch.js" defer></script>
+    <script src="js/campaign-ads.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers | Ramjicart</title>
+</head>
+<body>
+    <main class="offers-page" data-campaign-offers>
+        <a class="campaign-offers-link" href="index.html">← Home</a>
+        <h1>Offers near you</h1>
+        <p class="offers-message" data-offers-message role="status" aria-live="polite">Loading offers…</p>
+        <section class="campaign-offers-grid" data-offers-list aria-label="Available offers"></section>
+    </main>
+</body>
+</html>

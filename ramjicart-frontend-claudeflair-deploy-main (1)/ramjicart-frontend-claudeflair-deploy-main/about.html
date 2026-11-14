@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <link rel="stylesheet" href="css/site.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Learn about Ramjicart, an online platform for discovering local restaurants and grocery shops and placing orders.">
+    <title>About Us | Ramjicart</title>
+    <style>
+        :root { color-scheme: dark; font-family: Arial, sans-serif; color: #fff; background: #0b0716; }
+        * { box-sizing: border-box; }
+        body { margin: 0; line-height: 1.65; }
+        header { background: #100b20; border-bottom: 1px solid #35294b; }
+        .header-inner, main, footer { width: min(900px, calc(100% - 32px)); margin: 0 auto; }
+        .header-inner { min-height: 76px; display: flex; align-items: center; gap: 14px; }
+        .header-inner img { width: 52px; height: 52px; object-fit: contain; }
+        .brand { color: #e84a0c; font-weight: 700; text-decoration: none; font-size: 1.2rem; }
+        main { margin: 32px auto; padding: clamp(22px, 5vw, 48px); color: #fff; background: #171127; border: 1px solid #35294b; border-radius: 16px; box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+        h1, h2 { color: #fff; line-height: 1.25; }
+        h1 { margin: 0 0 18px; font-size: clamp(1.8rem, 4vw, 2.4rem); }
+        h2 { margin-top: 30px; font-size: 1.25rem; }
+        a { color: #ff9b76; }
+        footer { padding: 0 0 28px; color: #fff; font-size: .9rem; }
+        footer a { margin-right: 16px; }
+        @media (max-width: 520px) { main { margin-top: 16px; padding: 22px 18px; } }
+    </style>
+    <script src="js/layout.js" defer></script>
+</head>
+<body>
+    <div data-layout-fragment="legalHeader"></div>
+    <main>
+        <h1>About Ramjicart</h1>
+        <p>Ramjicart is an online platform that helps customers discover participating restaurants and grocery shops and place food or grocery orders.</p>
+        <h2>How it works</h2>
+        <p>Customers can browse participating businesses, choose available items, and place pickup or delivery orders where those options are offered. Restaurants and shops manage the products they list and fulfil accepted orders. Delivery orders may be handled by an assigned delivery partner.</p>
+        <h2>Our aim</h2>
+        <p>We aim to make it easier to find local options and follow an order from placement through fulfilment. Available businesses, items, prices, and delivery coverage can vary by location and are shown on the website.</p>
+        <h2>Get in touch</h2>
+        <p>For questions or support, visit our <a href="contact.html">Contact &amp; Support page</a>. Please include your order number when your question relates to an order.</p>
+    </main>
+    <footer>
+        <a href="terms.html">Terms and Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="refund.html">Cancellation &amp; Refund Policy</a>
+        <a href="contact.html">Contact &amp; Support</a>
+        <a href="index.html">Home</a>
+    </footer>
+</body>
+</html>

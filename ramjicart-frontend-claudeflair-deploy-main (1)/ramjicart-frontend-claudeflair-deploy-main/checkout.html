@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/site.css">
+    <script src="config.js"></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Ramjicart</title>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { margin: 0; padding: 28px 16px; background: #f7f8fa; color: #222; }
+        main { max-width: 980px; margin: auto; }
+        .site-brand { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 12px; color: #10233f; font-weight: 700; text-decoration: none; }
+        .site-brand img { width: 48px; height: 48px; object-fit: contain; }
+        h1 { color: #ff4d2d; }
+        .layout { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px; }
+        .card { background: #fff; padding: 24px; border-radius: 14px; box-shadow: 0 4px 18px #0000000d; }
+        .field { margin: 16px 0; }
+        label { display: block; margin-bottom: 7px; font-weight: 600; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccd1d8; border-radius: 8px; font-size: 16px; }
+        textarea { min-height: 90px; resize: vertical; }
+        .type-option { display: inline-flex; align-items: center; gap: 8px; margin: 8px 20px 8px 0; }
+        .type-option input { width: auto; }
+        .row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .row.total { font-size: 20px; font-weight: 700; border: 0; }
+        button { width: 100%; padding: 14px; border: 0; border-radius: 9px; background: #ff4d2d; color: white; font-size: 17px; font-weight: 700; cursor: pointer; }
+        button:disabled { opacity: .6; cursor: wait; }
+        #message { min-height: 24px; color: #b42318; }
+        .note { color: #667085; line-height: 1.5; font-size: 14px; }
+        @media (max-width: 700px) {
+            body { padding: 18px 14px calc(22px + env(safe-area-inset-bottom)); }
+            .layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+            .card { min-width: 0; padding: 18px 15px; }
+            .type-option { min-height: 44px; margin-right: 0; line-height: 1.4; }
+            .type-option input { min-width: 20px; min-height: 20px; }
+            .row { align-items: flex-start; gap: 8px; }
+            .row > span { min-width: 0; }
+            .row > strong { text-align: right; overflow-wrap: anywhere; }
+            .note { font-size: 15px; }
+            button { min-height: 48px; }
+        }
+    </style>
+    <script src="js/auth-client.js" defer></script>
+    <script src="js/maps-client.js" defer></script>
+    <script src="js/layout.js" defer></script>
+</head>
+<body>
+<main>
+    <a class="site-brand" href="index.html"><img loading="lazy" src="images/logo%20(2).png" alt="Ramjicart logo">Ramjicart</a>
+    <h1>Checkout</h1>
+    <p class="note">Before ordering, review our <a href="terms.html">Terms</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="refund.html">Cancellation &amp; Refund Policy</a>. Need help? <a href="contact.html">Contact support</a>.</p>
+    <p><a href="cartpage.html">← Back to cart</a></p>
+    <div class="layout">
+        <section class="card">
+            <h2>Order details</h2>
+            <div class="field">
+                <label>Order type</label>
+                <label class="type-option"><input type="radio" name="orderType" value="pickup" checked> On the way (I'll collect from the restaurant)</label>
+                <label class="type-option"><input type="radio" name="orderType" value="delivery" hidden> Delivery</label>
+            </div>
+            <p id="customerInfo" class="note"></p>
+            <div class="field" id="addressField" hidden>
+                <label for="deliveryAddress">Delivery address</label>
+                <textarea id="deliveryAddress" autocomplete="street-address"></textarea>
+                <button id="captureDeliveryLocationButton" type="button">
+                    Use my current location
+                </button>
+                <p id="deliveryLocationMessage" class="note" role="status" aria-live="polite">
+                    Location is optional. Your address is still required for delivery.
+                </p>
+                <input id="deliveryLatitude" type="hidden">
+                <input id="deliveryLongitude" type="hidden">
+            </div>
+        </section>
+        <aside class="card">
+            <h2>Order summary</h2>
+            <div class="row"><span>Food total</span><strong id="itemTotal">₹0.00</strong></div>
+            <div class="row" hidden><span>Restaurant commission (online)</span><strong id="commissionFee">₹0.00</strong></div>
+            <div class="row" id="deliveryRow" hidden><span>Delivery charge</span><strong id="deliveryFee">₹0.00</strong></div>
+            <div class="row" id="platformRow"><span>Platform fee</span><strong id="platformFee">₹10.00</strong></div>
+            <div class="row"><span>pay at checkout</span><strong id="onlinePaymentAmount">₹0.00</strong></div>
+            <div class="row"><span id="payLaterLabel">Pay at restaurant</span><strong id="payLaterAmount">₹0.00</strong></div>
+            <div class="row total"><span>Total order amount</span><strong id="customerTotal">₹0.00</strong></div>
+            <p id="paymentNote" class="note">Payment gateway is not connected yet. This is the planned payment split only; no online money is collected right now. Clicking Place order will place the order without taking payment.</p>
+            <p id="message" role="status"></p>
+            <button id="payButton" type="button">Place order</button>
+        </aside>
+    </div>
+</main>
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+    const message = document.getElementById("message");
+    const payButton = document.getElementById("payButton");
+    let activeQuote = null;
+    let cashfreeConfig = null;
+
+    async function loadCashfreeSdk() {
+        if (window.Cashfree) return;
+        await new Promise(function(resolve, reject) {
+            const script = document.createElement("script");
+            script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+            script.onload = resolve;
+            script.onerror = function() {
+                reject(new Error("Cashfree checkout could not be loaded."));
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    async function loadPaymentConfig() {
+        try {
+            const response = await fetch("/api/config/public");
+            if (!response.ok) {
+                throw new Error("Payment options could not be loaded. Please try again later.");
+            }
+            cashfreeConfig = await response.json();
+            if (cashfreeConfig.cashfreeEnabled) {
+                document.getElementById("paymentNote").textContent =
+                    "Cashfree will collect the commission and applicable fees now. The remaining amount is payable at handover.";
+                payButton.textContent = "Pay fees with Cashfree";
+            }
+        } catch (error) {
+            cashfreeConfig = { cashfreeEnabled: false };
+            message.textContent = error.message || "Payment options could not be loaded. Please try again later.";
+        }
+    }
+
+    async function loadCustomer() {
+        const response = await RamjicartAuth.currentUser();
+        if (!response.ok) {
+            window.location.href = "login.html";
+            return;
+        }
+        const customer = await response.json();
+        document.getElementById("customerInfo").textContent =
+            "Ordering as " + customer.name + " · " + customer.phone;
+    }
+
+    function csrfToken() {
+        const cookie = document.cookie.split("; ")
+            .find(function(value) { return value.startsWith("csrftoken="); });
+        return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
+    }
+
+    function selectedOrderType() {
+        return document.querySelector('input[name="orderType"]:checked').value;
+    }
+
+    document.getElementById("captureDeliveryLocationButton")
+        .addEventListener("click", function() {
+            const locationMessage =
+                document.getElementById("deliveryLocationMessage");
+            if (!navigator.geolocation) {
+                locationMessage.textContent =
+                    "This browser does not support device location. You can enter your address manually.";
+                return;
+            }
+            locationMessage.textContent = "Requesting location permission...";
+            RamjicartMaps.getCurrentPosition(
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+            ).then(function(position) {
+                    document.getElementById("deliveryLatitude").value =
+                        position.coords.latitude.toFixed(6);
+                    document.getElementById("deliveryLongitude").value =
+                        position.coords.longitude.toFixed(6);
+                    locationMessage.textContent =
+                        "Location captured for this order.";
+                }).catch(function(error) {
+                    locationMessage.textContent =
+                        error.message || "Could not read device location.";
+                });
+        });
+
+    function formatRupees(value) {
+        return "₹" + Number(value || 0).toFixed(2);
+    }
+
+    async function updateQuote() {
+        const delivery = selectedOrderType() === "delivery";
+        let cartItems;
+        try {
+            cartItems = RamjicartCart.items();
+        } catch (error) {
+            activeQuote = null;
+            message.textContent = error.message || "Your saved cart could not be read.";
+            return;
+        }
+        if (!cartItems.length) {
+            activeQuote = null;
+            message.textContent = "Your cart is empty. Add items before checkout.";
+            return;
+        }
+        document.getElementById("addressField").hidden = !delivery;
+        document.getElementById("deliveryAddress").required = delivery;
+        document.getElementById("deliveryRow").hidden = !delivery;
+        document.getElementById("payLaterLabel").textContent = delivery
+            ? "Pay delivery partner later"
+            : "Pay restaurant later";
+        try {
+            const response = await fetch("/api/customer/checkout/quote", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken() },
+                body: JSON.stringify({
+                    orderType: selectedOrderType(),
+                    items: cartItems.map(function(item) {
+                        return {
+                            foodId: item.foodId || item.id,
+                            quantity: item.quantity,
+                            variantId: item.variantId || "",
+                            addonIds: item.addonIds || []
+                        };
+                    })
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.detail || data.message || "Could not calculate order total.");
+            activeQuote = data;
+            document.getElementById("itemTotal").textContent = formatRupees(data.itemTotal);
+            document.getElementById("deliveryFee").textContent = formatRupees(data.deliveryFee);
+            document.getElementById("platformFee").textContent = formatRupees(data.platformFee);
+            document.getElementById("commissionFee").textContent = formatRupees(data.commissionAmount);
+            document.getElementById("onlinePaymentAmount").textContent = formatRupees(data.gatewayAmount);
+            document.getElementById("payLaterAmount").textContent = formatRupees(data.payLaterAmount);
+            document.getElementById("customerTotal").textContent = formatRupees(data.customerTotal);
+            message.textContent = "";
+        } catch (error) {
+            activeQuote = null;
+            message.textContent = error.message;
+        }
+    }
+
+    document.querySelectorAll('input[name="orderType"]').forEach(function(input) {
+        input.addEventListener("change", updateQuote);
+    });
+
+    payButton.addEventListener("click", async function() {
+        if (!activeQuote) {
+            await updateQuote();
+            if (!activeQuote) return;
+        }
+        const deliveryAddress = document.getElementById("deliveryAddress").value.trim();
+        const deliveryLatitude = document.getElementById("deliveryLatitude").value;
+        const deliveryLongitude = document.getElementById("deliveryLongitude").value;
+        if (selectedOrderType() === "delivery" && !deliveryAddress) {
+            message.textContent = "Please enter a delivery address.";
+            return;
+        }
+        if (Boolean(deliveryLatitude) !== Boolean(deliveryLongitude)) {
+            message.textContent = "Both delivery location coordinates are required.";
+            return;
+        }
+
+        payButton.disabled = true;
+        payButton.textContent = "Placing order...";
+        message.textContent = "";
+        try {
+            const response = await fetch("/api/customer/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken() },
+                body: JSON.stringify({
+                    orderType: selectedOrderType(),
+                    items: RamjicartCart.items().map(function(item) {
+                        return {
+                            foodId: item.foodId || item.id,
+                            quantity: item.quantity,
+                            variantId: item.variantId || "",
+                            addonIds: item.addonIds || []
+                        };
+                    }),
+                    deliveryAddress: deliveryAddress,
+                    latitude: deliveryLatitude,
+                    longitude: deliveryLongitude
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.detail || data.message || "Could not place order.");
+            RamjicartCart.clear();
+            if (data.paymentRequired) {
+                await loadCashfreeSdk();
+                const cashfree = window.Cashfree({ mode: data.cashfreeMode });
+                const result = await cashfree.checkout({
+                    paymentSessionId: data.paymentSessionId,
+                    redirectTarget: "_self"
+                });
+                if (result && result.error) {
+                    throw new Error(result.error.message || "Cashfree checkout could not start.");
+                }
+                return;
+            }
+            sessionStorage.setItem("orderConfirmationCode", data.confirmationCode);
+            window.location.href = "orderpage.html?id=" + encodeURIComponent(data.orderId);
+        } catch (error) {
+            message.textContent = error.message;
+            payButton.disabled = false;
+            payButton.textContent = "Place order";
+        }
+    });
+
+    loadCustomer();
+    loadPaymentConfig();
+    updateQuote();
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <link rel="stylesheet" href="css/site.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Explore a practical Ramjicart food guide to fresh fruits, vegetables, fast food, juices and drinks, with simple shopping and storage tips.">
+    <title>Food Articles: Fruits, Vegetables, Fast Food &amp; Drinks | Ramjicart</title>
+    <style>
+        :root { color-scheme: dark; font-family: Arial, sans-serif; color: #fff; background: #0b0716; }
+        * { box-sizing: border-box; }
+        body { margin: 0; line-height: 1.7; }
+        header { background: #100b20; border-bottom: 1px solid #35294b; }
+        .header-inner, main, footer { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+        .header-inner { min-height: 76px; display: flex; align-items: center; gap: 14px; }
+        .header-inner img { width: 52px; height: 52px; object-fit: contain; }
+        .brand { color: #ff8054; font-weight: 700; text-decoration: none; font-size: 1.2rem; }
+        main { margin: 32px auto; padding: clamp(22px, 5vw, 52px); color: #fff; background: #171127; border: 1px solid #35294b; border-radius: 18px; box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+        h1, h2, h3 { color: #fff; line-height: 1.25; }
+        h1 { margin: 0 0 16px; font-size: clamp(2rem, 5vw, 3rem); }
+        h2 { margin-top: 42px; padding-bottom: 8px; border-bottom: 1px solid #443451; font-size: clamp(1.45rem, 3vw, 1.9rem); }
+        h3 { margin-top: 26px; font-size: 1.15rem; }
+        p, li { color: #f1edf7; }
+        a { color: #ffab87; }
+        .intro { color: #e3ddec; font-size: 1.1rem; }
+        .updated { color: #c9c0d4; font-size: .9rem; }
+        .contents { margin: 24px 0; padding: 18px 22px; background: #211a32; border: 1px solid #443451; border-radius: 14px; }
+        .contents strong { display: block; margin-bottom: 8px; }
+        .contents ul { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding-left: 20px; }
+        .tip { margin: 22px 0; padding: 16px 18px; background: #211a32; border-left: 4px solid #ff8054; border-radius: 8px; }
+        .tip p { margin: 0; }
+        .category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+        .category-card { padding: 16px; background: #211a32; border: 1px solid #443451; border-radius: 12px; }
+        .category-card h3 { margin: 0 0 8px; }
+        .category-card p { margin: 0; }
+        .page-footer { padding: 0 0 28px; color: #fff; }
+        .page-footer a { margin-right: 14px; color: #fff; }
+        @media (max-width: 600px) {
+            main { margin-top: 16px; padding: 22px 18px; }
+            .category-grid { grid-template-columns: 1fr; }
+            .contents ul { display: block; }
+        }
+    </style>
+    <script src="js/layout.js" defer></script>
+</head>
+<body>
+    <div data-layout-fragment="legalHeader"></div>
+    <main>
+        <h1>A practical guide to food and drinks</h1>
+        <p class="updated">Ramjicart Food Articles</p>
+        <p class="intro">From seasonal fruit and everyday vegetables to quick meals, fresh juices, and favourite drinks, this guide offers useful ideas for choosing, ordering, serving, and storing the things you enjoy. Availability and selection can vary by shop, restaurant, and location.</p>
+
+        <nav class="contents" aria-label="Article sections">
+            <strong>In this guide</strong>
+            <ul>
+                <li><a href="#fruit">Fresh fruit</a></li>
+                <li><a href="#vegetables">Vegetables</a></li>
+                <li><a href="#fast-food">Fast food</a></li>
+                <li><a href="#juice">Juices</a></li>
+                <li><a href="#drinks">Drinks</a></li>
+                <li><a href="#shopping">Shopping and storage</a></li>
+            </ul>
+        </nav>
+
+        <section id="fruit">
+            <h2>Fresh fruit: colour, flavour, and season</h2>
+            <p>Fruit can be a snack on its own, a breakfast addition, or a refreshing part of a meal. What is available changes through the year, so local seasonal choices are often a good place to start. Look at the listed variety, size, quantity, and price before ordering; fruit sold by piece, bunch, or weight can differ from one listing to another.</p>
+            <div class="category-grid">
+                <article class="category-card"><h3>Everyday favourites</h3><p>Bananas, apples, oranges, and papaya are easy to serve at home or pack for later. Choose ripe fruit for eating soon and firmer pieces when you plan to keep them for a while.</p></article>
+                <article class="category-card"><h3>Seasonal picks</h3><p>Mangoes, grapes, guava, watermelon, muskmelon, pomegranate, and citrus may be easier to find in particular seasons. Ask the seller about ripeness when the timing matters.</p></article>
+                <article class="category-card"><h3>Serving ideas</h3><p>Cut fruit just before serving when possible. Add it to curd, oats, or a simple fruit bowl, or combine a few textures for an easy dessert. Wash whole fruit under clean running water before cutting it.</p></article>
+                <article class="category-card"><h3>Keeping fruit fresh</h3><p>Store ripe cut fruit covered in the refrigerator and use it promptly. Keep whole fruit in a clean, ventilated place or refrigerate it when appropriate for that variety. Follow any handling directions supplied with the product.</p></article>
+            </div>
+            <p>When ordering fresh fruit, check whether the quantity is listed as a single piece, a pack, or a weight. If a product arrives damaged or differs from what you ordered, keep the order details and contact support with the order number.</p>
+        </section>
+
+        <section id="vegetables">
+            <h2>Vegetables for everyday cooking</h2>
+            <p>Vegetables bring different textures and flavours to meals: leafy greens, crisp roots, tender gourds, and familiar cooking staples can all fit into a weekly plan. A mix of colours and types also makes it easier to vary recipes rather than relying on the same few ingredients.</p>
+            <h3>Useful groups to know</h3>
+            <ul>
+                <li><strong>Leafy greens:</strong> spinach, coriander, fenugreek leaves, and other seasonal greens. Look for fresh leaves and use them soon after purchase.</li>
+                <li><strong>Everyday cooking vegetables:</strong> tomato, onion, potato, cauliflower, cabbage, okra, and eggplant work across many home-style dishes.</li>
+                <li><strong>Roots and crunchy choices:</strong> carrot, radish, beetroot, and cucumber add a different bite to cooked meals, salads, or snacks.</li>
+                <li><strong>Seasonal vegetables:</strong> gourds, beans, peas, and other local produce can add variety as availability changes.</li>
+            </ul>
+            <h3>Plan around the meal</h3>
+            <p>Think about what you will cook before choosing quantities. A quick stir-fry might need a few vegetables that cook at a similar pace; a curry or stew can use firmer pieces that hold their shape. Keep delicate greens separate from heavier produce, and avoid washing vegetables until you are ready to use them if they will be stored.</p>
+            <div class="tip"><p><strong>Simple storage tip:</strong> Refrigerate produce that needs chilling, keep it dry and uncrushed, and use the most delicate items first. Wash produce under clean running water before preparation.</p></div>
+        </section>
+
+        <section id="fast-food">
+            <h2>Fast food and quick meals</h2>
+            <p>Fast food is popular because it is convenient, familiar, and easy to share. Menus may include burgers, sandwiches, pizza, wraps, noodles, fries, rolls, snacks, and regional favourites. The ingredients, portion sizes, customisation options, and preparation methods differ between restaurants, so check the menu description for the specific item you are ordering.</p>
+            <h3>Make an order that suits the moment</h3>
+            <ul>
+                <li>Check the serving size and included sides before adding a meal or combo to your cart.</li>
+                <li>Review add-ons and customisations carefully; extra toppings, sauces, or drinks may change the total.</li>
+                <li>If you have an allergy or dietary requirement, contact the restaurant directly to ask about ingredients and possible cross-contact. A menu description may not include every detail.</li>
+                <li>For a group, compare individual items with combo options and confirm how many people each option is intended to serve.</li>
+                <li>For delivery, provide clear instructions and a reachable phone number so the restaurant and delivery partner can complete the handover.</li>
+            </ul>
+            <p>Some meals are best enjoyed soon after preparation. Delivery time and food temperature can vary with distance, traffic, weather, and restaurant workload. Follow the restaurant's guidance for reheating and safe handling if the food will not be eaten straight away.</p>
+        </section>
+
+        <section id="juice">
+            <h2>Juices: fruit blends and refreshing choices</h2>
+            <p>Juice menus can include fresh-squeezed citrus, single-fruit options, mixed fruit blends, and seasonal combinations. Smoothies and shakes are different menu choices and may include milk, curd, ice cream, or other ingredients. Read the description to understand what is included and whether the drink is served chilled or with added ingredients.</p>
+            <h3>Choosing a juice</h3>
+            <p>Pick a flavour you enjoy and check the size, ingredients, and any sweetener information provided by the seller. If you prefer a particular preparation, such as no added sugar, ask the shop whether it can be made that way before placing the order. For a shared meal, consider whether one large drink or separate servings are more convenient.</p>
+            <h3>Freshness and handling</h3>
+            <p>Freshly prepared drinks are usually intended to be consumed soon. Keep them chilled when needed and follow the shop's storage advice. If a seal is missing or the drink appears damaged on arrival, do not consume it; contact the seller or support and share your order details.</p>
+        </section>
+
+        <section id="drinks">
+            <h2>Drinks for meals, breaks, and gatherings</h2>
+            <p>Depending on the participating shop, you may find bottled water, sparkling drinks, soft drinks, tea, coffee, lassi, buttermilk, coconut water, and other local favourites. Availability, serving sizes, packaging, and prices vary. For packaged products, check the label for ingredients, storage directions, and the best-before date when you receive the item.</p>
+            <div class="category-grid">
+                <article class="category-card"><h3>Water and sparkling drinks</h3><p>Check bottle size and quantity, especially when ordering for more than one person. Keep unopened bottles stored as directed on the label.</p></article>
+                <article class="category-card"><h3>Tea and coffee</h3><p>Hot drinks may cool during travel. Choose the size and additions shown on the menu, and handle hot containers carefully when they arrive.</p></article>
+                <article class="category-card"><h3>Traditional refreshments</h3><p>Lassi, buttermilk, and coconut water can be refreshing options where listed. Ask about dairy or other ingredients if you need to avoid a particular item.</p></article>
+                <article class="category-card"><h3>Drinks for a group</h3><p>Check pack counts and serving sizes before checkout. For an event, order with enough time and confirm availability with the shop if you need a larger quantity.</p></article>
+            </div>
+        </section>
+
+        <section id="shopping">
+            <h2>Simple shopping, ordering, and storage tips</h2>
+            <ol>
+                <li><strong>Read the listing:</strong> confirm the item name, size, pack quantity, price, and any options before adding it to your cart.</li>
+                <li><strong>Plan your timing:</strong> order delicate fresh produce close to when you can store or prepare it, and consider restaurant preparation time for hot meals.</li>
+                <li><strong>Check your address and contact details:</strong> a complete delivery address and reachable phone number can help avoid handover delays.</li>
+                <li><strong>Review the checkout total:</strong> check item prices, fees, payment method, and delivery or pickup details before submitting your order.</li>
+                <li><strong>Store items promptly:</strong> refrigerate items that need chilling and follow the product label or seller's handling instructions.</li>
+                <li><strong>Keep your order number:</strong> it helps the participating business and support team find the right order if you have a question.</li>
+            </ol>
+            <p>Ramjicart lists products and menus offered by participating businesses. The business prepares and supplies the food or groceries, and the available selection may change. For questions about ingredients, substitutions, availability, or preparation, contact the restaurant or shop before ordering. For order support, visit <a href="contact.html">Contact &amp; Support</a>.</p>
+            <p>Ready to browse? Visit <a href="resturentpage.html">Restaurants</a> to see participating options, or read <a href="about.html">About Ramjicart</a>.</p>
+        </section>
+    </main>
+    <footer class="page-footer">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact &amp; Support</a>
+        <a href="terms.html">Terms and Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="refund.html">Cancellation &amp; Refund Policy</a>
+        <a href="index.html">Home</a>
+    </footer>
+</body>
+</html>

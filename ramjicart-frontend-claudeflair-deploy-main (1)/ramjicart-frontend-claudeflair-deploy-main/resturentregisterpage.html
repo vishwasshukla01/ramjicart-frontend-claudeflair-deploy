@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/js/pwa.js" defer></script>
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/site.css">
+    <script src="config.js"></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/cart.js" defer></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ramjicart - Restaurant Registration</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .registration-page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .registration-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .registration-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .registration-header h1 {
+            color: #ff5a16;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .registration-header h2 {
+            color: #222;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .registration-header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff5a16;
+            box-shadow: 0 0 0 3px rgba(255, 90, 22, 0.10);
+        }
+
+        #registerButton {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #ff5a16;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #registerButton:hover {
+            background: #e94e0c;
+        }
+
+        #captureRestaurantLocationButton {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ff5a16;
+            border-radius: 8px;
+            background: white;
+            color: #ff5a16;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #registerMessage {
+            min-height: 20px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #ff5a16;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+
+            .registration-container {
+                padding: 25px 20px;
+            }
+
+            .registration-header h1 {
+                font-size: 28px;
+            }
+
+            .registration-header h2 {
+                font-size: 22px;
+            }
+
+            .registration-container input:not([type="checkbox"]):not([type="radio"]),
+            .registration-container select,
+            .registration-container textarea { min-height: 46px; font-size: 16px; }
+            .registration-container button { min-height: 46px; }
+            .registration-container label { font-size: 15px; }
+
+        }
+
+    </style>
+
+    <script src="js/auth-client.js" defer></script>
+    <script src="js/maps-client.js" defer></script>
+    <script src="js/layout.js" defer></script>
+</head>
+
+
+<body>
+
+    <main class="registration-page">
+
+        <div class="registration-container">
+
+            <div class="registration-header">
+
+                <h1><img loading="lazy" src="images/logo%20(2).png" alt="Ramjicart logo" style="width:58px;height:58px;object-fit:contain;vertical-align:middle"> Ramjicart</h1>
+
+                <h2>Restaurant Registration</h2>
+
+                <p>
+                    Create your restaurant account
+                </p>
+
+            </div>
+
+
+            <form id="registrationForm">
+
+                <button type="button" id="googleRegisterButton" style="width:100%;padding:12px;margin-bottom:18px;background:#fff;color:#222;border:1px solid #bbb;border-radius:8px;cursor:pointer">
+                    Continue with Google
+                </button>
+
+
+                <div class="form-group">
+
+                    <label for="restaurantName">
+                        Restaurant Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="restaurantName"
+                        name="restaurantName"
+                        placeholder="Enter restaurant name"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantLatitude">Latitude (optional)</label>
+                    <input
+                        type="number"
+                        id="restaurantLatitude"
+                        min="-90"
+                        max="90"
+                        step="0.000001"
+                        placeholder="Use current location or enter coordinates"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantLongitude">Longitude (optional)</label>
+                    <input
+                        type="number"
+                        id="restaurantLongitude"
+                        min="-180"
+                        max="180"
+                        step="0.000001"
+                        placeholder="Use current location or enter coordinates"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="captureRestaurantLocationButton">
+                        Use this device's current location
+                    </button>
+                    <p id="restaurantLocationMessage" role="status" aria-live="polite"></p>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="ownerName">
+                        Owner Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ownerName"
+                        name="ownerName"
+                        placeholder="Enter owner name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="restaurantEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="restaurantEmail"
+                        name="email"
+                        placeholder="Enter restaurant email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="restaurantPhone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="restaurantPhone"
+                        name="phone"
+                        placeholder="Enter phone number"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="restaurantAddress">
+                        Restaurant Address
+                    </label>
+
+                    <textarea
+                        id="restaurantAddress"
+                        name="address"
+                        placeholder="Enter restaurant address"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantNearbyLandmark">Nearby Landmark (Optional)</label>
+                    <input
+                        type="text"
+                        id="restaurantNearbyLandmark"
+                        maxlength="160"
+                        placeholder="e.g. City Hospital"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantMarket">Market (Optional)</label>
+                    <input
+                        type="text"
+                        id="restaurantMarket"
+                        maxlength="160"
+                        placeholder="e.g. Hazratganj Market"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantPincode">6-digit PIN Code</label>
+                    <input
+                        type="text"
+                        id="restaurantPincode"
+                        inputmode="numeric"
+                        maxlength="6"
+                        placeholder="e.g. 226001"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurantCity">City</label>
+                    <input
+                        type="text"
+                        id="restaurantCity"
+                        maxlength="100"
+                        placeholder="e.g. Lucknow"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="restaurantPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="restaurantPassword"
+                        name="password"
+                        placeholder="Create password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                >
+                    Register Restaurant
+                </button>
+
+
+                <p id="registerMessage"></p>
+
+            </form>
+
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login here
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+        const registrationForm =
+            document.getElementById("registrationForm");
+        let googleRegistrationIdentity = null;
+
+        document.getElementById("googleRegisterButton").addEventListener("click", async function() {
+            const button = this;
+            registerMessage.textContent = "Connecting your Google account...";
+            button.disabled = true;
+            try {
+                googleRegistrationIdentity = await RamjicartAuth.startGoogleSignIn();
+                document.getElementById("restaurantEmail").value = googleRegistrationIdentity.email;
+                const ownerName = document.getElementById("ownerName");
+                if (!ownerName.value.trim()) ownerName.value = googleRegistrationIdentity.displayName;
+                ["restaurantPassword", "confirmPassword"].forEach(function(id) {
+                    const input = document.getElementById(id);
+                    input.required = false;
+                    input.closest(".form-group").hidden = true;
+                });
+                registerMessage.textContent = "Google connected. Complete the restaurant details to submit registration.";
+            } catch (error) {
+                registerMessage.textContent = error.message || "Could not connect Google account.";
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        const registerMessage =
+            document.getElementById("registerMessage");
+
+        document.getElementById("captureRestaurantLocationButton")
+            .addEventListener("click", function() {
+                const locationMessage =
+                    document.getElementById("restaurantLocationMessage");
+                if (!navigator.geolocation) {
+                    locationMessage.textContent =
+                        "This browser does not support device location.";
+                    return;
+                }
+                locationMessage.textContent = "Requesting location permission...";
+                RamjicartMaps.getCurrentPosition(
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+                ).then(function(position) {
+                        document.getElementById("restaurantLatitude").value =
+                            position.coords.latitude.toFixed(6);
+                        document.getElementById("restaurantLongitude").value =
+                            position.coords.longitude.toFixed(6);
+                        locationMessage.textContent =
+                            "Location captured. It will be saved with your restaurant profile.";
+                    }).catch(function(error) {
+                        locationMessage.textContent =
+                            error.message || "Could not read device location.";
+                    });
+            });
+
+
+        registrationForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const restaurantName =
+                    document.getElementById("restaurantName").value.trim();
+
+                const ownerName =
+                    document.getElementById("ownerName").value.trim();
+
+                const email =
+                    document.getElementById("restaurantEmail").value.trim();
+
+                const phone =
+                    document.getElementById("restaurantPhone").value.trim();
+
+                const address =
+                    document.getElementById("restaurantAddress").value.trim();
+
+                const nearbyLandmark =
+                    document.getElementById("restaurantNearbyLandmark").value.trim();
+
+                const market =
+                    document.getElementById("restaurantMarket").value.trim();
+
+                const pincode =
+                    document.getElementById("restaurantPincode").value.trim();
+
+                const city =
+                    document.getElementById("restaurantCity").value.trim();
+
+                const latitude =
+                    document.getElementById("restaurantLatitude").value;
+
+                const longitude =
+                    document.getElementById("restaurantLongitude").value;
+
+                const password =
+                    document.getElementById("restaurantPassword").value;
+
+                const confirmPassword =
+                    document.getElementById("confirmPassword").value;
+
+
+                if (!googleRegistrationIdentity && password !== confirmPassword) {
+
+                    registerMessage.textContent =
+                        "Passwords do not match.";
+
+                    return;
+                }
+
+
+                registerButton.disabled = true;
+
+                registerButton.textContent =
+                    "Registering...";
+
+                registerMessage.textContent = "";
+
+
+                try {
+
+                    const response = await RamjicartAuth.registerRestaurant({
+                        restaurantName: restaurantName,
+                        ownerName: ownerName,
+                        email: email,
+                        phone: phone,
+                        address: address,
+                        nearbyLandmark: nearbyLandmark,
+                        market: market,
+                        pincode: pincode,
+                        city: city,
+                        latitude: latitude,
+                        longitude: longitude,
+                        password: password
+                    }, googleRegistrationIdentity);
+
+
+                    const data = await response.json();
+
+
+                    if (response.ok) {
+
+                        registerMessage.textContent =
+                            data.message ||
+                            "Restaurant registered successfully.";
+                        window.setTimeout(function() {
+                            window.location.href = data.redirect || "resturentloginpage.html";
+                        }, 800);
+
+                    } else {
+
+                        registerMessage.textContent =
+                            data.message ||
+                            "Registration failed.";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Registration error:",
+                        error
+                    );
+
+                    registerMessage.textContent =
+                        "Something went wrong. Please try again.";
+
+                }
+
+
+                registerButton.disabled = false;
+
+                registerButton.textContent =
+                    "Register Restaurant";
+
+            }
+
+        );
+
+    
+        });
+    </script>
+
+</body>
+
+</html>

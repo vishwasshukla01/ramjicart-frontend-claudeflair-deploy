@@ -2565,13 +2565,6 @@ if (productForm) {
                 document.getElementById("addProductBtn");
 
 
-            /* Form data */
-
-            const formData = new FormData(productForm);
-            formData.delete("productImageFile");
-            if (selectedProductPhoto) formData.append("productImageFile", await compressProductImage(selectedProductPhoto), "product.jpg");
-
-
             try {
 
                 /* Disable button */
@@ -2580,6 +2573,15 @@ if (productForm) {
 
                 addProductBtn.textContent =
                     "Adding...";
+
+                /* Compress and attach the selected image inside the try block so
+                   image decoding/upload errors follow the same recovery path. */
+                const formData = new FormData(productForm);
+                formData.delete("productImageFile");
+                if (selectedProductPhoto) {
+                    const compressedPhoto = await compressProductImage(selectedProductPhoto);
+                    formData.append("productImageFile", compressedPhoto, "product.jpg");
+                }
 
 
                 /*
@@ -2603,10 +2605,12 @@ if (productForm) {
                     );
 
 
+                const responseBody = await response.json().catch(() => ({}));
                 if (!response.ok) {
-                    throw new Error(
-                        "Product could not be added"
-                    );
+                    throw new Error(responseBody.detail || responseBody.message ||
+                        (response.status === 413
+                            ? "The image upload is too large. Choose a smaller image."
+                            : `Product could not be added (HTTP ${response.status}).`));
                 }
 
 
@@ -2614,8 +2618,7 @@ if (productForm) {
                     Backend ka response
                 */
 
-                const newProduct =
-                    await response.json();
+                const newProduct = responseBody;
 
 
                 /*
@@ -2646,13 +2649,10 @@ if (productForm) {
 
             } catch (error) {
 
-                console.error(
-                    "Add product error:",
-                    error
-                );
+                console.error("Add product error:", error);
 
                 alert(
-                    "Product add nahi ho saka."
+                    error.message || "Product add nahi ho saka."
                 );
 
             } finally {

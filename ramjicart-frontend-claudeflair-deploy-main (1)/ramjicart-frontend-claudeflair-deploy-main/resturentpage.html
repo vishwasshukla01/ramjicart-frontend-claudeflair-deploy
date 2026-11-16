@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+    <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
     <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
@@ -10,7 +11,6 @@
     <script src="js/config.js" defer></script>
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>resturent page</title>
     <style>
@@ -783,10 +783,16 @@ form > .message {
     <script src="js/layout.js" defer></script>
 </head>
 <body>
-    <header>
+
+<header>
         <div>
          <a href="index.html" aria-label="Ramjicart home"><img loading="lazy" src="images/logo%20(2).png" alt="Ramjicart logo" style="width:58px;height:58px;object-fit:contain"></a>
          <b>   Good Food . Good Mood  </b>
+<div class="adsterra-native-wrapper restaurant-hero-native" style="width:100%;max-width:100%;overflow:hidden;margin:16px 0 64px;min-height:250px" aria-label="Advertisement">
+    <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
+    <script async="async" data-cfasync="false" src="https://bauval.org/21/842c21a8aca660290df4136cfc702f9a"></script>
+    <div id="container-842c21a8aca660290df4136cfc702f9a"></div>
+</div>
          <h1>Discover The Best Restaurants<br> Near You</h1>
             <h4> Explore top resturents,delicious food and amazing offers <br>- all in one place.</h4>
 
@@ -799,6 +805,7 @@ form > .message {
 </div>
 </div>
     </header>
+
 <main>
     <h1>What are you craving</h1>
 
@@ -832,7 +839,7 @@ form > .message {
     <p id="locationMessage" class="message" role="status" aria-live="polite"></p>
 
 </form>
-    
+
     <section id="categories" aria-label="Food categories"></section>
 
     <section id="category-products" hidden aria-live="polite">
@@ -841,6 +848,22 @@ form > .message {
         <p id="category-products-message" class="message"></p>
     </section>
 
+
+<div class="adsterra-banner-wrapper" style="display:flex;justify-content:center;align-items:center;flex-direction:column;max-width:100%;overflow:hidden;margin:64px auto 24px;min-height:50px" aria-label="Advertisement">
+            <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
+            <div class="adsterra-banner-content" style="display:flex;justify-content:center;width:100%;max-width:100%;overflow:hidden">
+                <script>
+ atOptions = {
+   'key' : 'bfa75260ee965cd44540dbcd0e93584a',
+   'format' : 'iframe',
+   'height' : 50,
+   'width' : 320,
+   'params' : {}
+ };
+                </script>
+                <script src="https://bauval.org/22/bfa75260ee965cd44540dbcd0e93584a"></script>
+            </div>
+        </div>
 
     <!-- Restaurant Section -->
 
@@ -865,6 +888,9 @@ form > .message {
         <p id="restaurant-message" class="message" role="status" aria-live="polite">
             Share your current location for distance-ranked results, or enter your city and PIN code.
         </p>
+
+
+
 
     </section>
 </main>
@@ -972,7 +998,7 @@ async function loadCategoryFoods(categoryId, categoryName) {
             description.textContent = food.description || "";
             const price = document.createElement("p");
             price.className = "category-food-price";
-            price.textContent = "₹" + Number(food.price).toFixed(2);
+            price.textContent = "â‚¹" + Number(food.price).toFixed(2);
             const addButton = document.createElement("button");
             addButton.type = "button";
             addButton.textContent = "Order now";
@@ -1145,7 +1171,7 @@ async function loadNearbyRestaurants(location, scrollToResults) {
                 location.market,
                 location.pincode,
                 location.city
-            ].filter(Boolean).join(" · ");
+            ].filter(Boolean).join(" Â· ");
         renderRestaurants();
         if (scrollToResults) {
             document.getElementById("restaurants").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1267,5 +1293,6 @@ loadCategories();
 
         });
     </script>
+    <script src="js/adsterra.js" defer></script>
 </body>
 </html>

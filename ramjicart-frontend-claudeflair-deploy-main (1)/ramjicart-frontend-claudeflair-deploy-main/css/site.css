@@ -205,3 +205,13 @@
 .ad-wrapper > .ad-slot ins.adsbygoogle {
     width: 100%;
 }
+/* Adsterra placements stay within the available viewport width. */
+.adsterra-native-wrapper { width: 100%; max-width: 100%; overflow: hidden; margin: 16px 0; min-height: 120px; }
+.adsterra-label { display: block; margin: 0 0 6px; color: #9aa0a8; font-size: 11px; line-height: 1.2; letter-spacing: .04em; }
+.adsterra-banner-wrapper { display: flex; flex-direction: column; justify-content: center; align-items: center; max-width: 100%; overflow: hidden; margin: 16px auto; min-height: 50px; }
+.adsterra-banner-content { display: flex; justify-content: center; width: 100%; max-width: 100%; overflow: hidden; }
+.adsterra-banner-content > * { max-width: 100%; }
+.homepage-category-native { grid-column: 1 / -1; min-height: 140px; }
+.cart-native-ad { margin-top: 100px; }
+.restaurant-hero-native { min-height: 250px; margin: 16px 0 24px; }
+.dashboard-native-ad { margin-top: 80px; }

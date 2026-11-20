@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
     <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
@@ -16,6 +15,7 @@
     <script src="js/galaxy-bg.js" defer></script>
     <script src="js/ads.js" defer></script>
     <script src="js/campaign-ads.js" defer></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ramjicart - Food Delivery</title>
 
@@ -736,13 +736,13 @@
             }
 
             #categoryList {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                overflow: visible;
-                padding: 0;
+                display: flex;
+                overflow-x: auto;
+                padding: 0 0 10px;
+                scroll-snap-type: x mandatory;
             }
 
-            #categoryList > * { min-width: 0; }
+            #categoryList > * { flex: 0 0 132px; scroll-snap-align: start; }
 
             #foodList {
                 grid-template-columns: 1fr;
@@ -971,7 +971,7 @@
             .nav-links a:nth-of-type(1)::after { content: "Restaurants"; }
             .nav-links a:nth-of-type(2)::before { content: "🕘"; }
             .nav-links a:nth-of-type(2)::after { content: "History"; }
-            .nav-links a:nth-of-type(4)::before { content: "â˜Žï¸"; }
+            .nav-links a:nth-of-type(4)::before { content: "☎️"; }
             .nav-links a:nth-of-type(4)::after { content: "Contact us"; }
 
             .nav-links a:nth-of-type(1)::before,
@@ -1139,14 +1139,14 @@
             main > section h2 { margin-bottom: 14px; font-size: 22px; color: #f1f5f9; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7); }
 
             #categoryList {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                display: flex;
                 gap: 10px;
-                overflow: visible;
-                padding: 2px 0 12px;
+                overflow-x: auto;
+                padding: 2px 2px 12px;
+                scroll-snap-type: x mandatory;
             }
 
-            #categoryList > * { min-width: 0; }
+            #categoryList > * { flex: 0 0 132px; scroll-snap-align: start; }
 
             #foodList { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 
@@ -1654,23 +1654,6 @@
 
         </section>
 
-
-        <div class="adsterra-banner-wrapper" style="display:flex;justify-content:center;align-items:center;flex-direction:column;max-width:100%;overflow:hidden;margin:16px auto;min-height:50px" aria-label="Advertisement">
-            <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-            <div class="adsterra-banner-content" style="display:flex;justify-content:center;width:100%;max-width:100%;overflow:hidden">
-                <script>
- atOptions = {
-   'key' : 'bfa75260ee965cd44540dbcd0e93584a',
-   'format' : 'iframe',
-   'height' : 50,
-   'width' : 320,
-   'params' : {}
- };
-                </script>
-                <script src="https://bauval.org/22/bfa75260ee965cd44540dbcd0e93584a"></script>
-            </div>
-        </div>
-
         <div class="campaign-offers-link-wrap"><a class="campaign-offers-link" href="offers.html">See all offers</a></div>
 
         <section class="campaign-carousel" data-campaign-carousel aria-label="Sponsored offers" hidden>
@@ -1696,12 +1679,6 @@
 
             </div>
 
-
-            <div class="adsterra-native-wrapper homepage-category-native" id="homepageNativeAd" style="width:100%;max-width:100%;overflow:hidden;margin:16px 0;min-height:140px;grid-column:1/-1" aria-label="Advertisement">
-                <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-                <script async="async" data-cfasync="false" src="https://bauval.org/21/842c21a8aca660290df4136cfc702f9a"></script>
-                <div id="container-842c21a8aca660290df4136cfc702f9a"></div>
-            </div>
             <p
                 id="categoryMessage"
                 class="message"
@@ -1730,6 +1707,7 @@
             ></p>
 
         </section>
+
         <section id="shopsNearYou" aria-labelledby="shopsNearYouHeading">
             <div class="shops-nearby-heading">
                 <h2 id="shopsNearYouHeading">Shops Near You</h2>
@@ -1838,8 +1816,6 @@
         const categoryList =
             document.getElementById("categoryList");
 
-        const homepageNativeAd = document.getElementById("homepageNativeAd");
-
         const trackingSteps =
             document.getElementById("trackingSteps");
 
@@ -1935,7 +1911,7 @@
                 location.market,
                 location.pincode,
                 location.city
-            ].filter(Boolean).join(" Â· ");
+            ].filter(Boolean).join(" · ");
         }
 
         function renderNearbyShops() {
@@ -1986,7 +1962,7 @@
                 const categories = document.createElement("p");
                 categories.className = "nearby-shop-meta";
                 categories.textContent = Array.isArray(shop.categories) && shop.categories.length
-                    ? shop.categories.join(" Â· ")
+                    ? shop.categories.join(" · ")
                     : "Menu available";
                 const address = document.createElement("p");
                 address.className = "nearby-shop-meta";
@@ -2233,7 +2209,7 @@
                     const selected = food.variants.find(function(variant) {
                         return String(variant.id) === variantSelect.value;
                     });
-                    price.textContent = "â‚¹" + Number(
+                    price.textContent = "₹" + Number(
                         selected ? selected.price : food.price
                     ).toFixed(2);
                 });
@@ -2246,7 +2222,7 @@
                 checkbox.type = "checkbox";
                 checkbox.value = addon.id;
                 const name = document.createElement("span");
-                name.textContent = addon.name + " (+â‚¹" + Number(addon.price).toFixed(2) + ")";
+                name.textContent = addon.name + " (+₹" + Number(addon.price).toFixed(2) + ")";
                 label.append(checkbox, name);
                 controls.push(label);
                 addonInputs.push(checkbox);
@@ -2302,7 +2278,7 @@
                     restaurant.textContent = food.restaurantName || "";
                     const price = document.createElement("p");
                     price.className = "food-price";
-                    price.textContent = "â‚¹" + Number(food.price).toFixed(2);
+                    price.textContent = "₹" + Number(food.price).toFixed(2);
                     const menuOptions = appendFoodOptions(food, price);
                     let selectedQuantity = 1;
                     if (food.quantityUnit === "kg" && !(food.variants || []).length) {
@@ -2410,15 +2386,7 @@
                         categoryCard
                     );
 
-                    if (categoryList.children.length === 7) {
-                        categoryList.appendChild(homepageNativeAd);
-                    }
-
                 });
-
-                if (categories.length < 7) {
-                    categoryList.appendChild(homepageNativeAd);
-                }
 
             } catch (error) {
 
@@ -2521,7 +2489,7 @@
                 restaurant.textContent = food.restaurantDistanceKm !== null
                     && food.restaurantDistanceKm !== undefined
                     && Number.isFinite(locationDistance)
-                    ? `${food.restaurantName || ""} Â· ${locationDistance.toFixed(1)} km away`
+                    ? `${food.restaurantName || ""} · ${locationDistance.toFixed(1)} km away`
                     : food.restaurantName || "";
 
                 const description = document.createElement("p");
@@ -2529,7 +2497,7 @@
 
                 const price = document.createElement("p");
                 price.className = "food-price";
-                price.textContent = "â‚¹" + food.price;
+                price.textContent = "₹" + food.price;
                 const menuOptions = appendFoodOptions(food, price);
 
                 const button = document.createElement("button");
@@ -2832,7 +2800,7 @@
                     status.className = "order-history-status";
                     const collapsedTotal = document.createElement("span");
                     collapsedTotal.className = "order-history-total";
-                    collapsedTotal.textContent = "â‚¹" + Number(order.total).toFixed(2);
+                    collapsedTotal.textContent = "₹" + Number(order.total).toFixed(2);
                     summary.append(orderBlock, collapsedTotal, status);
                     card.appendChild(summary);
                     const details = document.createElement("div");
@@ -2845,7 +2813,7 @@
 
                     const total = document.createElement("p");
                     total.className = "order-history-total";
-                    total.textContent = "Total: â‚¹" + order.total;
+                    total.textContent = "Total: ₹" + order.total;
 
                     const detailsLink = document.createElement("a");
                     detailsLink.href = "orderpage.html?id=" + encodeURIComponent(order.id);
@@ -2932,6 +2900,6 @@
     
         });
     </script>
-    <script src="js/adsterra.js" defer></script>
+
 </body>
 </html>

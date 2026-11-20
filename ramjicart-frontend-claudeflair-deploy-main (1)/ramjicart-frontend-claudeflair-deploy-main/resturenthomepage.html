@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/site.css">
     <script src="config.js"></script>
     <script src="js/config.js" defer></script>
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ramjicart</title>
 <style>
@@ -1567,7 +1569,7 @@ body {
 
             <button type="button" class="refresh-button" id="refreshDashboardBtn"
                 aria-label="Refresh dashboard" title="Refresh dashboard">
-                â†»
+                ↻
             </button>
 
             <button
@@ -1610,7 +1612,7 @@ body {
                 </span>
 
                 <span class="restaurant-arrow">
-                    âŒ„
+                    ⌄
                 </span>
 
             </a>
@@ -1630,7 +1632,7 @@ body {
             <li><a href="#menu-section">🍱 Menu items</a></li><hr>
             <li><a href="certificate.html">📜 Partnership certificate</a></li><hr>
             <li><a href="resturentprofilepage.html">🏪  Profile</a></li><hr>
-            <li><a href="resturentsettingpage.html">âš™ï¸  Settings</a></li><hr>
+            <li><a href="resturentsettingpage.html">⚙️  Settings</a></li><hr>
         </ul>
     </nav>
     <main class="hero-banner" id="dashboard">
@@ -1664,7 +1666,7 @@ body {
       <p class="card-title">Total Products</p>
       <h3 class="card-value" id="total-products">0</h3>
     </div>
-    <button type="button" class="card-arrow-btn" id="btn-total-products">â†’</button>
+    <button type="button" class="card-arrow-btn" id="btn-total-products">→</button>
   </div>
 
     <div class="stat-card">
@@ -1673,7 +1675,7 @@ body {
             <p class="card-title">Total Orders</p>
             <h3 class="card-value" id="total-orders">0</h3>
         </div>
-        <button type="button" class="card-arrow-btn" id="btn-total-orders" aria-label="View all orders">â†’</button>
+        <button type="button" class="card-arrow-btn" id="btn-total-orders" aria-label="View all orders">→</button>
     </div>
 
   <div class="stat-card">
@@ -1683,26 +1685,26 @@ body {
       <h3 class="card-value" id="pending-orders">0</h3>
     </div>
  
-    <button type="button" class="card-arrow-btn" id="btn-pending-orders">â†’</button>
+    <button type="button" class="card-arrow-btn" id="btn-pending-orders">→</button>
   </div>
 
   <div class="stat-card">
-    <span class="card-icon icon-blue">âœ…</span>
+    <span class="card-icon icon-blue">✅</span>
     <div class="card-info">
       <p class="card-title">Completed Orders</p>
       <h3 class="card-value" id="completed-orders">0</h3>
     </div>
-    <button type="button" class="card-arrow-btn" id="btn-completed-orders">â†’</button>
+    <button type="button" class="card-arrow-btn" id="btn-completed-orders">→</button>
   </div>
 
   <div class="stat-card">
-    <span class="card-icon icon-purple">â‚¹</span>
+    <span class="card-icon icon-purple">₹</span>
     <div class="card-info">
       <p class="card-title">Today's Earning</p>
-      <h3 class="card-value" id="todays-earning">â‚¹ 0</h3>
+      <h3 class="card-value" id="todays-earning">₹ 0</h3>
     </div>
 
-    <button type="button" class="card-arrow-btn" id="btn-todays-earning">â†’</button>
+    <button type="button" class="card-arrow-btn" id="btn-todays-earning">→</button>
   </div>
 
 </div>
@@ -1728,7 +1730,7 @@ body {
             <h2>Customer orders</h2>
             <p>Accept orders, update preparation status, and confirm pickup.</p>
         </div>
-        <a class="back-to-dashboard" href="#dashboard">â† Dashboard</a>
+        <a class="back-to-dashboard" href="#dashboard">← Dashboard</a>
     </div>
     <div class="order-controls">
         <button type="button" id="enableOrderAlerts">Enable browser alerts and sound</button>
@@ -1764,7 +1766,7 @@ body {
 <section class="restaurant-orders-section" id="restaurant-reports">
     <div class="restaurant-orders-header">
         <div><h2>Order reports</h2><p>Review order counts and item sales for a selected date range.</p></div>
-        <a class="back-to-dashboard" href="#dashboard">â† Dashboard</a>
+        <a class="back-to-dashboard" href="#dashboard">← Dashboard</a>
     </div>
     <div class="report-controls">
         <label>From <input type="date" id="reportStartDate"></label>
@@ -1784,7 +1786,7 @@ body {
     <div class="section-header">
         <h2>Add New Product</h2>
         <p>Fill in the details to add a new item to your menu.</p>
-        <a class="back-to-dashboard" href="#dashboard">â† Dashboard</a>
+        <a class="back-to-dashboard" href="#dashboard">← Dashboard</a>
     </div>
 
     <form class="product-form" id="productForm">
@@ -1819,7 +1821,7 @@ body {
 
         <!-- Price -->
         <div class="form-group">
-            <label for="productPrice">Price (â‚¹)</label>
+            <label for="productPrice">Price (₹)</label>
 
             <input
                 type="number"
@@ -1954,7 +1956,7 @@ body {
 
         </div>
 
-        <a class="back-to-dashboard" href="#dashboard">â† Dashboard</a>
+        <a class="back-to-dashboard" href="#dashboard">← Dashboard</a>
 
     </div>
 
@@ -1965,28 +1967,6 @@ body {
     </div>
 
 </section>
-<div class="adsterra-native-wrapper dashboard-native-ad" style="width:100%;max-width:100%;overflow:hidden;margin:80px 0 16px;min-height:120px" aria-label="Advertisement">
-    <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-    <script async="async" data-cfasync="false" src="https://bauval.org/21/842c21a8aca660290df4136cfc702f9a"></script>
-    <div id="container-842c21a8aca660290df4136cfc702f9a"></div>
-</div>
-
-        <div class="adsterra-banner-wrapper" style="display:flex;justify-content:center;align-items:center;flex-direction:column;max-width:100%;overflow:hidden;margin:16px auto;min-height:50px" aria-label="Advertisement">
-            <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-            <div class="adsterra-banner-content" style="display:flex;justify-content:center;width:100%;max-width:100%;overflow:hidden">
-                <script>
- atOptions = {
-   'key' : 'bfa75260ee965cd44540dbcd0e93584a',
-   'format' : 'iframe',
-   'height' : 50,
-   'width' : 320,
-   'params' : {}
- };
-                </script>
-                <script src="https://bauval.org/22/bfa75260ee965cd44540dbcd0e93584a"></script>
-            </div>
-        </div>
-
 <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -2137,7 +2117,7 @@ async function loadDashboardData() {
 
         if (todaysEarning) {
             todaysEarning.textContent =
-                "â‚¹ " + (data.todaysEarning ?? 0);
+                "₹ " + (data.todaysEarning ?? 0);
         }
 
 
@@ -2288,7 +2268,7 @@ function renderMenuProducts(products) {
             "menu-item";
 
 
-        const safeOptions = list => (list || []).map(option => `${escapeMenuHtml(option.name)} (+â‚¹${escapeMenuHtml(option.price)})`).join(", ");
+        const safeOptions = list => (list || []).map(option => `${escapeMenuHtml(option.name)} (+₹${escapeMenuHtml(option.price)})`).join(", ");
         productCard.innerHTML = `
 
             <img loading="lazy"
@@ -2310,7 +2290,7 @@ function renderMenuProducts(products) {
                 </p>
 
                 <p class="menu-item-price">
-                    â‚¹ ${escapeMenuHtml(product.price ?? 0)}
+                    ₹ ${escapeMenuHtml(product.price ?? 0)}
                 </p>
                 <p class="menu-item-options">${safeOptions(product.variants) ? "Variants: " + safeOptions(product.variants) : ""}</p>
                 <p class="menu-item-options">${safeOptions(product.addons) ? "Add-ons: " + safeOptions(product.addons) : ""}</p>
@@ -2349,7 +2329,7 @@ function optionLines(options) {
 async function editMenuProduct(product) {
     const name = prompt("Product name", product.name);
     if (name === null) return;
-    const price = prompt("Price (â‚¹)", product.price);
+    const price = prompt("Price (₹)", product.price);
     if (price === null) return;
     const description = prompt("Description", product.description || "");
     if (description === null) return;
@@ -2755,7 +2735,7 @@ function renderRestaurantOrders() {
         const items = (order.items || []).map(item => `
             <div class="restaurant-order-item">
                 <span>${escapeOrderText(item.quantity)} × ${escapeOrderText(item.name)}</span>
-                <strong>â‚¹${escapeOrderText(item.price)}</strong>
+                <strong>₹${escapeOrderText(item.price)}</strong>
             </div>
         `).join("");
 
@@ -2809,9 +2789,9 @@ function renderRestaurantOrders() {
             </div>
             <div class="restaurant-order-items">
                 ${items}
-                <div class="restaurant-order-total"><span>Total</span><span>â‚¹${escapeOrderText(order.total)}</span></div>
+                <div class="restaurant-order-total"><span>Total</span><span>₹${escapeOrderText(order.total)}</span></div>
             </div>
-            ${order.rejectionReason ? `<p class="order-card-label">Reason: ${escapeOrderText(order.rejectionReason)}${order.refundStatus && order.refundStatus !== "not_required" ? ` Â· Refund: ${escapeOrderText(order.refundStatus)}` : ""}</p>` : ""}
+            ${order.rejectionReason ? `<p class="order-card-label">Reason: ${escapeOrderText(order.rejectionReason)}${order.refundStatus && order.refundStatus !== "not_required" ? ` · Refund: ${escapeOrderText(order.refundStatus)}` : ""}</p>` : ""}
             <div class="restaurant-order-actions">${actions}</div>`;
         list.appendChild(card);
     });
@@ -2922,7 +2902,7 @@ async function enableRestaurantBrowserAlerts() {
         }
         document.getElementById("orderAlertStatus").textContent =
             ("Notification" in window && Notification.permission === "granted" ? "Browser alerts enabled" : "Sound enabled; allow notifications in your browser settings")
-            + " Â· polling every 30 seconds";
+            + " · polling every 30 seconds";
     } catch (error) {
         document.getElementById("orderAlertStatus").textContent = "Browser alerts could not be enabled.";
     }
@@ -3204,7 +3184,7 @@ const reportStartInput = document.getElementById("reportStartDate");
 const reportEndInput = document.getElementById("reportEndDate");
 const reportMessage = document.getElementById("reportMessage");
 const reportCsvLink = document.getElementById("downloadReportCsv");
-const reportMoney = value => `â‚¹${Number(value || 0).toFixed(2)}`;
+const reportMoney = value => `₹${Number(value || 0).toFixed(2)}`;
 function setReportRange(days) {
     const end = new Date();
     const start = new Date();
@@ -3264,7 +3244,6 @@ loadRestaurantReport();
         });
     </script>
 
-    <script src="js/adsterra.js" defer></script>
 </body>
 
 </html>

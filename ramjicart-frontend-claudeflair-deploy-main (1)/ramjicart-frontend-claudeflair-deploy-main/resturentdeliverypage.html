@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <link rel="manifest" href="/manifest.json">
     <script src="/js/pwa.js" defer></script>
+    <script async src="https://pagead.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4193609364468205"
+     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/site.css">
     <script src="config.js"></script>
     <script src="js/config.js" defer></script>
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Ramjicart - Delivery Partner</title>
@@ -534,7 +536,7 @@ button {
             <p>Earnings (payment tracking off)</p>
 
             <h2 id="todayEarnings">
-                â‚¹0
+                ₹0
             </h2>
 
         </div>
@@ -587,27 +589,6 @@ button {
     </section>
 
 </main>
-<div class="adsterra-native-wrapper dashboard-native-ad" style="width:100%;max-width:100%;overflow:hidden;margin:80px 0 16px;min-height:120px" aria-label="Advertisement">
-    <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-    <script async="async" data-cfasync="false" src="https://bauval.org/21/842c21a8aca660290df4136cfc702f9a"></script>
-    <div id="container-842c21a8aca660290df4136cfc702f9a"></div>
-</div>
-
-        <div class="adsterra-banner-wrapper" style="display:flex;justify-content:center;align-items:center;flex-direction:column;max-width:100%;overflow:hidden;margin:16px auto;min-height:50px" aria-label="Advertisement">
-            <span class="adsterra-label" style="display:block;margin:0 0 6px;color:#9aa0a8;font-size:11px;line-height:1.2">Advertisement</span>
-            <div class="adsterra-banner-content" style="display:flex;justify-content:center;width:100%;max-width:100%;overflow:hidden">
-                <script>
- atOptions = {
-   'key' : 'bfa75260ee965cd44540dbcd0e93584a',
-   'format' : 'iframe',
-   'height' : 50,
-   'width' : 320,
-   'params' : {}
- };
-                </script>
-                <script src="https://bauval.org/22/bfa75260ee965cd44540dbcd0e93584a"></script>
-            </div>
-        </div>
 
 
 <script>
@@ -734,7 +715,7 @@ async function loadDashboard() {
         document.getElementById(
             "todayEarnings"
         ).textContent =
-            data.earningsTracked ? `â‚¹${data.todayEarnings ?? 0}` : "Not tracked";
+            data.earningsTracked ? `₹${data.todayEarnings ?? 0}` : "Not tracked";
 
         renderDeliveryHistory(data.recentCompleted || []);
 
@@ -770,10 +751,10 @@ function renderDeliveryHistory(orders) {
                     <span class="status">Delivered</span>
                 </div>
                 <p class="message">${escapeHtml(order.date)}</p>
-                <p><strong>${escapeHtml(order.restaurant?.name || "Restaurant")}</strong> â†’ ${escapeHtml(order.customer?.name || "Customer")}</p>
+                <p><strong>${escapeHtml(order.restaurant?.name || "Restaurant")}</strong> → ${escapeHtml(order.customer?.name || "Customer")}</p>
                 <div class="order-items">
                     ${items}
-                    <div class="order-total"><span>Restaurant payout</span><span>â‚¹${escapeHtml(order.restaurantPayout)}</span></div>
+                    <div class="order-total"><span>Restaurant payout</span><span>₹${escapeHtml(order.restaurantPayout)}</span></div>
                 </div>
             </article>`;
     }).join("");
@@ -841,7 +822,7 @@ async function loadAvailableOrders() {
             card.className = "order-card";
             const eligibility = escapeHtml(order.eligibilityMessage || "Open delivery offer")
                 + (order.distanceKm !== null && order.distanceKm !== undefined
-                    ? ` Â· ${escapeHtml(order.distanceKm)} km away`
+                    ? ` · ${escapeHtml(order.distanceKm)} km away`
                     : "");
             const acceptButton = order.eligible
                 ? `<button class="accept-btn" onclick="acceptDelivery('${order.id}')">Accept Delivery</button>`
@@ -939,7 +920,7 @@ async function loadAvailableOrders() {
                     ${(order.items || []).map(function(item) {
                         return `<div class="order-item-row"><span>${escapeHtml(item.quantity)} × ${escapeHtml(item.name)}</span></div>`;
                     }).join("")}
-                    <div class="order-total"><span>Restaurant payout</span><span>â‚¹${escapeHtml(order.restaurantPayout)}</span></div>
+                    <div class="order-total"><span>Restaurant payout</span><span>₹${escapeHtml(order.restaurantPayout)}</span></div>
                 </div>
 
                 <div class="button-group">${acceptButton}</div>
@@ -1130,7 +1111,7 @@ async function loadCurrentDelivery() {
                         ${(order.items || []).map(function(item) {
                             return `<div class="order-item-row"><span>${escapeHtml(item.quantity)} × ${escapeHtml(item.name)}</span></div>`;
                         }).join("")}
-                        <div class="order-total"><span>Restaurant payout</span><span>â‚¹${escapeHtml(order.restaurantPayout)}</span></div>
+                        <div class="order-total"><span>Restaurant payout</span><span>₹${escapeHtml(order.restaurantPayout)}</span></div>
                     </div>
                     <div class="button-group">${actionButtons}</div>
                     <div class="otp-box">
@@ -1482,6 +1463,5 @@ window.setInterval(function() {
         });
     </script>
 
-    <script src="js/adsterra.js" defer></script>
 </body>
 </html>
